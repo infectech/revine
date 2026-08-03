@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, PhoneCall } from "lucide-react";
+import { Loader2, PhoneCall } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,7 +49,6 @@ export default function CheckoutForm({
   const clearCart = useCart((s) => s.clearCart);
 
   const [submitting, setSubmitting] = useState(false);
-  const [orderId, setOrderId] = useState<string | null>(null);
 
   const {
     register,
@@ -106,7 +104,6 @@ export default function CheckoutForm({
 
       if (data.success && data.orderId) {
         trackPurchase(data.orderId, total);
-        setOrderId(data.orderId);
         onOrderPlaced?.(data.orderId);
         clearCart();
       } else {
@@ -122,35 +119,6 @@ export default function CheckoutForm({
       setSubmitting(false);
     }
   };
-
-  if (orderId) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex flex-col items-center gap-4 rounded-3xl border border-black/5 bg-white p-10 text-center"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 14 }}
-        >
-          <CheckCircle2 className="size-16 text-gold" strokeWidth={1.5} />
-        </motion.div>
-        <h2 className="font-heading text-2xl font-semibold text-black">
-          Order Successfully Placed
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Thank you for shopping with Revine. We will call you shortly to
-          confirm delivery.
-        </p>
-        <p className="rounded-full bg-muted px-4 py-1.5 text-sm font-medium text-black">
-          Your Order ID: {orderId}
-        </p>
-      </motion.div>
-    );
-  }
 
   return (
     <form

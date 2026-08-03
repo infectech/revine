@@ -7,15 +7,18 @@ import { useCart } from "@/hooks/use-cart";
 import { trackInitiateCheckout } from "@/lib/pixel";
 import CheckoutForm from "@/components/CheckoutForm";
 import OrderSummary from "@/components/OrderSummary";
+import OrderSuccess from "@/components/OrderSuccess";
 import { Button } from "@/components/ui/button";
 
 export default function CheckoutPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
+  const closeCart = useCart((s) => s.closeCart);
   const [district, setDistrict] = useState("");
   const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
+    closeCart();
     if (items.length > 0) {
       trackInitiateCheckout(items, subtotal);
     }
@@ -62,12 +65,7 @@ export default function CheckoutPage() {
       )}
 
       {placedOrderId ? (
-        <div className="mx-auto mt-8 max-w-lg">
-          <CheckoutForm
-            onDistrictChange={setDistrict}
-            onOrderPlaced={setPlacedOrderId}
-          />
-        </div>
+        <OrderSuccess orderId={placedOrderId} />
       ) : (
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
           <OrderSummary district={district} />
