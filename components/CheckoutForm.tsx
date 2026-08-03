@@ -38,9 +38,13 @@ type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 interface CheckoutFormProps {
   onDistrictChange?: (district: string) => void;
+  onOrderPlaced?: (orderId: string) => void;
 }
 
-export default function CheckoutForm({ onDistrictChange }: CheckoutFormProps) {
+export default function CheckoutForm({
+  onDistrictChange,
+  onOrderPlaced,
+}: CheckoutFormProps) {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
   const clearCart = useCart((s) => s.clearCart);
@@ -103,6 +107,7 @@ export default function CheckoutForm({ onDistrictChange }: CheckoutFormProps) {
       if (data.success && data.orderId) {
         trackPurchase(data.orderId, total);
         setOrderId(data.orderId);
+        onOrderPlaced?.(data.orderId);
         clearCart();
       } else {
         toast.error(
