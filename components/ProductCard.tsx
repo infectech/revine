@@ -21,14 +21,21 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
       transition={{ duration: 0.5, delay: (index % 6) * 0.06, ease: "easeOut" }}
       className="flex flex-col overflow-hidden rounded-3xl border border-black/5 bg-white"
     >
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => onSelect(product)}
-        className="block text-left"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onSelect(product);
+          }
+        }}
+        className="block cursor-pointer text-left"
         aria-label={`View ${product.name}`}
       >
         <ProductSlider images={product.images} alt={product.name} className="rounded-none" />
-      </button>
+      </div>
 
       <div className="flex flex-1 flex-col gap-1 p-4">
         <h3 className="font-heading text-lg font-medium leading-snug text-black">

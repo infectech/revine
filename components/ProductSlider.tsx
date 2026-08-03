@@ -82,7 +82,10 @@ export default function ProductSlider({
           <button
             type="button"
             aria-label="Previous image"
-            onClick={scrollPrev}
+            onClick={(e) => {
+              e.stopPropagation();
+              scrollPrev();
+            }}
             className="absolute left-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
           >
             <ChevronLeft className="size-4" />
@@ -90,7 +93,10 @@ export default function ProductSlider({
           <button
             type="button"
             aria-label="Next image"
-            onClick={scrollNext}
+            onClick={(e) => {
+              e.stopPropagation();
+              scrollNext();
+            }}
             className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black opacity-0 shadow-sm transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
           >
             <ChevronRight className="size-4" />
@@ -102,7 +108,10 @@ export default function ProductSlider({
                 key={i}
                 type="button"
                 aria-label={`Go to image ${i + 1}`}
-                onClick={() => scrollTo(i)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  scrollTo(i);
+                }}
                 className={cn(
                   "h-1.5 rounded-full transition-all",
                   i === selectedIndex ? "w-4 bg-white" : "w-1.5 bg-white/60"
