@@ -68,7 +68,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="flex min-h-full flex-col bg-white text-black">
+      <body
+        className="flex min-h-full flex-col bg-white text-black"
+        suppressHydrationWarning
+      >
         {META_PIXEL_ID && (
           <>
             <Script id="meta-pixel" strategy="afterInteractive">
