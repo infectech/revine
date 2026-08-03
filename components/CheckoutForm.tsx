@@ -216,7 +216,11 @@ export default function CheckoutForm({ onDistrictChange }: CheckoutFormProps) {
                   onDistrictChange?.(value ?? "");
                 }}
               >
-                <SelectTrigger id="district" aria-invalid={!!errors.district}>
+                <SelectTrigger
+                  id="district"
+                  aria-invalid={!!errors.district}
+                  className="h-8 w-full"
+                >
                   <SelectValue placeholder="Select district" />
                 </SelectTrigger>
                 <SelectContent>
