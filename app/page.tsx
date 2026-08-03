@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,11 @@ export default function Home() {
   const itemCount = useCart((s) => s.itemCount());
   const subtotal = useCart((s) => s.subtotal());
   const openCart = useCart((s) => s.openCart);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSelect = (product: Product) => {
     setSelectedProduct(product);
@@ -98,7 +103,7 @@ export default function Home() {
         onOpenChange={setModalOpen}
       />
 
-      {itemCount > 0 && (
+      {mounted && itemCount > 0 && (
         <button
           type="button"
           onClick={openCart}
