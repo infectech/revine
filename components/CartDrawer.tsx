@@ -1,0 +1,158 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { DELIVERY_CHARGE } from "@/lib/config";
+import { formatCurrency } from "@/lib/utils";
+
+export default function CartDrawer() {
+  const isOpen = useCart((s) => s.isOpen);
+  const closeCart = useCart((s) => s.closeCart);
+  const items = useCart((s) => s.items);
+  const updateQuantity = useCart((s) => s.updateQuantity);
+  const removeItem = useCart((s) => s.removeItem);
+  const subtotal = useCart((s) => s.subtotal());
+  const total = useCart((s) => s.total());
+
+  return (
+    <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
+      <SheetContent className="flex w-full flex-col gap-0 sm:max-w-md">
+        <SheetHeader className="border-b border-black/5">
+          <SheetTitle className="font-heading text-lg">Your Cart</SheetTitle>
+        </SheetHeader>
+
+        {items.length === 0 ? (
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 text-center">
+            <ShoppingBag className="size-12 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">
+              Your cart is empty
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={closeCart}
+            >
+              Continue Shopping
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="flex flex-col gap-4">
+                {items.map((item) => (
+                  <div
+                    key={`${item.productCode}-${item.size}`}
+                    className="flex gap-3"
+                  >
+                    <div className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-muted">
+                      <Image
+                        src={item.image}
+                        alt={item.productName}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-1 flex-col gap-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-medium leading-tight text-black">
+                            {item.productName}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {item.productCode} &middot; Size {item.size}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.productCode, item.size)}
+                          className="text-muted-foreground transition-colors hover:text-destructive"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      </div>
+                      <div className="mt-1 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            className="flex size-6 items-center justify-center rounded-full border border-black/15 hover:bg-muted"
+                            onClick={() =>
+                              updateQuantity(
+                                item.productCode,
+                                item.size,
+                                item.quantity - 1
+                              )
+                            }
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus className="size-3" />
+                          </button>
+                          <span className="w-4 text-center text-sm">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            className="flex size-6 items-center justify-center rounded-full border border-black/15 hover:bg-muted"
+                            onClick={() =>
+                              updateQuantity(
+                                item.productCode,
+                                item.size,
+                                item.quantity + 1
+                              )
+                            }
+                            aria-label="Increase quantity"
+                          >
+                            <Plus className="size-3" />
+                          </button>
+                        </div>
+                        <p className="text-sm font-medium text-black">
+                          {formatCurrency(item.price * item.quantity)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <SheetFooter className="gap-3 border-t border-black/5 bg-white">
+              <div className="flex flex-col gap-1.5 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>{formatCurrency(subtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Delivery</span>
+                  <span>{formatCurrency(DELIVERY_CHARGE)}</span>
+                </div>
+                <Separator className="my-1" />
+                <div className="flex justify-between text-base font-semibold text-black">
+                  <span>Total</span>
+                  <span>{formatCurrency(total)}</span>
+                </div>
+              </div>
+              <Link href="/checkout" className="w-full" onClick={closeCart}>
+                <Button className="h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black">
+                  Checkout
+                </Button>
+              </Link>
+            </SheetFooter>
+          </>
+        )}
+      </SheetContent>
+    </Sheet>
+  );
+}

@@ -1,0 +1,239 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { motion } from "framer-motion";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/use-cart";
+import { DELIVERY_CHARGE } from "@/lib/config";
+import { trackPurchase } from "@/lib/pixel";
+import { OrderPayload, OrderResponse } from "@/types";
+
+const checkoutSchema = z.object({
+  name: z.string().min(1, "Full name is required"),
+  phone: z
+    .string()
+    .regex(/^01[3-9]\d{8}$/, "Enter a valid Bangladeshi phone number"),
+  address: z.string().min(1, "Address is required"),
+  district: z.string().min(1, "District is required"),
+  area: z.string().min(1, "Area / Thana is required"),
+  note: z.string().optional(),
+});
+
+type CheckoutFormValues = z.infer<typeof checkoutSchema>;
+
+export default function CheckoutForm() {
+  const items = useCart((s) => s.items);
+  const total = useCart((s) => s.total());
+  const clearCart = useCart((s) => s.clearCart);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutFormValues>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      address: "",
+      district: "",
+      area: "",
+      note: "",
+    },
+  });
+
+  const onSubmit = async (values: CheckoutFormValues) => {
+    if (items.length === 0) return;
+    setSubmitting(true);
+
+    const payload: OrderPayload = {
+      customer: {
+        name: values.name,
+        phone: values.phone,
+        address: values.address,
+        district: values.district,
+        area: values.area,
+        note: values.note,
+      },
+      items: items.map((i) => ({
+        productCode: i.productCode,
+        productName: i.productName,
+        size: i.size,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+      deliveryCharge: DELIVERY_CHARGE,
+      total,
+    };
+
+    try {
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data: OrderResponse = await res.json();
+
+      if (data.success && data.orderId) {
+        trackPurchase(data.orderId, total);
+        setOrderId(data.orderId);
+        clearCart();
+      } else {
+        toast.error(
+          data.message ?? "We couldn't place your order. Please try again."
+        );
+      }
+    } catch {
+      toast.error(
+        "Something went wrong. Please check your connection and try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (orderId) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="flex flex-col items-center gap-4 rounded-3xl border border-black/5 bg-white p-10 text-center"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 14 }}
+        >
+          <CheckCircle2 className="size-16 text-gold" strokeWidth={1.5} />
+        </motion.div>
+        <h2 className="font-heading text-2xl font-semibold text-black">
+          Order Successfully Placed
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Thank you for shopping with Revine. We will call you shortly to
+          confirm delivery.
+        </p>
+        <p className="rounded-full bg-muted px-4 py-1.5 text-sm font-medium text-black">
+          Your Order ID: {orderId}
+        </p>
+      </motion.div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-5 rounded-3xl border border-black/5 bg-white p-5 sm:p-6"
+      noValidate
+    >
+      <h2 className="font-heading text-lg font-semibold text-black">
+        Delivery Details
+      </h2>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="name">Full Name *</Label>
+        <Input
+          id="name"
+          placeholder="Your full name"
+          aria-invalid={!!errors.name}
+          {...register("name")}
+        />
+        {errors.name && (
+          <p className="text-xs text-destructive">{errors.name.message}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="phone">Phone *</Label>
+        <Input
+          id="phone"
+          placeholder="01XXXXXXXXX"
+          inputMode="numeric"
+          aria-invalid={!!errors.phone}
+          {...register("phone")}
+        />
+        {errors.phone && (
+          <p className="text-xs text-destructive">{errors.phone.message}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="address">Address *</Label>
+        <Textarea
+          id="address"
+          placeholder="House, road, area details"
+          aria-invalid={!!errors.address}
+          {...register("address")}
+        />
+        {errors.address && (
+          <p className="text-xs text-destructive">{errors.address.message}</p>
+        )}
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="district">District *</Label>
+          <Input
+            id="district"
+            placeholder="e.g. Dhaka"
+            aria-invalid={!!errors.district}
+            {...register("district")}
+          />
+          {errors.district && (
+            <p className="text-xs text-destructive">
+              {errors.district.message}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="area">Area / Thana *</Label>
+          <Input
+            id="area"
+            placeholder="e.g. Mirpur"
+            aria-invalid={!!errors.area}
+            {...register("area")}
+          />
+          {errors.area && (
+            <p className="text-xs text-destructive">{errors.area.message}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="note">Note (optional)</Label>
+        <Textarea
+          id="note"
+          placeholder="Anything we should know about your delivery?"
+          {...register("note")}
+        />
+      </div>
+
+      <Button
+        type="submit"
+        disabled={submitting || items.length === 0}
+        className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black"
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+            Placing Order...
+          </>
+        ) : (
+          "Place Order (Cash on Delivery)"
+        )}
+      </Button>
+    </form>
+  );
+}
