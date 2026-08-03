@@ -36,9 +36,22 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/40">
-          &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights
-          reserved.
+        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights
+            reserved.
+          </p>
+          <p>
+            Built by{" "}
+            <a
+              href="https://infectech.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/60 underline underline-offset-2 transition-colors hover:text-gold"
+            >
+              Infectech
+            </a>
+          </p>
         </div>
       </div>
     </footer>
