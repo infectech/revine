@@ -37,20 +37,20 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
         <ProductSlider images={product.images} alt={product.name} className="rounded-none" />
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <h3 className="font-heading text-lg font-medium leading-snug text-black">
+      <div className="flex flex-1 flex-col gap-1 p-2.5 sm:p-4">
+        <h3 className="font-heading text-sm font-medium leading-snug text-black sm:text-lg">
           {product.name}
         </h3>
-        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground sm:text-xs">
           {product.code}
         </p>
-        <p className="mt-1 text-base font-semibold text-black">
+        <p className="mt-0.5 text-sm font-semibold text-black sm:mt-1 sm:text-base">
           {formatCurrency(product.price)}
         </p>
 
         <Button
           onClick={() => onSelect(product)}
-          className="mt-3 h-11 w-full rounded-full bg-black text-white transition-colors hover:bg-gold hover:text-black"
+          className="mt-2 h-9 w-full rounded-full bg-black text-xs text-white transition-colors hover:bg-gold hover:text-black sm:mt-3 sm:h-11 sm:text-sm"
         >
           View Details
         </Button>
