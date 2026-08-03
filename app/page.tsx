@@ -17,7 +17,7 @@ export default function Home() {
   );
   const [modalOpen, setModalOpen] = useState(false);
   const itemCount = useCart((s) => s.itemCount());
-  const total = useCart((s) => s.total());
+  const subtotal = useCart((s) => s.subtotal());
   const openCart = useCart((s) => s.openCart);
 
   const handleSelect = (product: Product) => {
@@ -109,7 +109,7 @@ export default function Home() {
             {itemCount} item{itemCount > 1 ? "s" : ""}
           </span>
           <span className="text-sm font-semibold text-gold">
-            {formatCurrency(total)}
+            {formatCurrency(subtotal)}
           </span>
         </button>
       )}

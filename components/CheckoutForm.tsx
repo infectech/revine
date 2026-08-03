@@ -1,18 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, PhoneCall } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useCart } from "@/hooks/use-cart";
-import { DELIVERY_CHARGE } from "@/lib/config";
+import { DISTRICTS, getDeliveryCharge } from "@/lib/config";
 import { trackPurchase } from "@/lib/pixel";
 import { OrderPayload, OrderResponse } from "@/types";
 
@@ -29,9 +36,13 @@ const checkoutSchema = z.object({
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+  onDistrictChange?: (district: string) => void;
+}
+
+export default function CheckoutForm({ onDistrictChange }: CheckoutFormProps) {
   const items = useCart((s) => s.items);
-  const total = useCart((s) => s.total());
+  const subtotal = useCart((s) => s.subtotal());
   const clearCart = useCart((s) => s.clearCart);
 
   const [submitting, setSubmitting] = useState(false);
@@ -39,6 +50,7 @@ export default function CheckoutForm() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<CheckoutFormValues>({
@@ -57,6 +69,9 @@ export default function CheckoutForm() {
     if (items.length === 0) return;
     setSubmitting(true);
 
+    const deliveryCharge = getDeliveryCharge(values.district);
+    const total = subtotal + deliveryCharge;
+
     const payload: OrderPayload = {
       customer: {
         name: values.name,
@@ -73,7 +88,7 @@ export default function CheckoutForm() {
         quantity: i.quantity,
         price: i.price,
       })),
-      deliveryCharge: DELIVERY_CHARGE,
+      deliveryCharge,
       total,
     };
 
@@ -142,6 +157,11 @@ export default function CheckoutForm() {
         Delivery Details
       </h2>
 
+      <div className="flex items-start gap-2 rounded-2xl bg-muted px-4 py-3 text-sm text-muted-foreground">
+        <PhoneCall className="mt-0.5 size-4 shrink-0 text-gold" />
+        <p>Our representative will call you shortly to confirm your order.</p>
+      </div>
+
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="name">Full Name *</Label>
         <Input
@@ -185,11 +205,29 @@ export default function CheckoutForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="district">District *</Label>
-          <Input
-            id="district"
-            placeholder="e.g. Dhaka"
-            aria-invalid={!!errors.district}
-            {...register("district")}
+          <Controller
+            name="district"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={(value) => {
+                  field.onChange(value ?? "");
+                  onDistrictChange?.(value ?? "");
+                }}
+              >
+                <SelectTrigger id="district" aria-invalid={!!errors.district}>
+                  <SelectValue placeholder="Select district" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DISTRICTS.map((district) => (
+                    <SelectItem key={district} value={district}>
+                      {district}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           />
           {errors.district && (
             <p className="text-xs text-destructive">

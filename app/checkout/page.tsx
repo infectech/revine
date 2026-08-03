@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
@@ -11,11 +11,12 @@ import { Button } from "@/components/ui/button";
 
 export default function CheckoutPage() {
   const items = useCart((s) => s.items);
-  const total = useCart((s) => s.total());
+  const subtotal = useCart((s) => s.subtotal());
+  const [district, setDistrict] = useState("");
 
   useEffect(() => {
     if (items.length > 0) {
-      trackInitiateCheckout(items, total);
+      trackInitiateCheckout(items, subtotal);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -55,9 +56,9 @@ export default function CheckoutPage() {
         Cash on delivery &mdash; pay when your order arrives.
       </p>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
-        <CheckoutForm />
-        <OrderSummary />
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+        <OrderSummary district={district} />
+        <CheckoutForm onDistrictChange={setDistrict} />
       </div>
     </div>
   );

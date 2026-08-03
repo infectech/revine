@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { DELIVERY_CHARGE } from "@/lib/config";
 import { formatCurrency } from "@/lib/utils";
 
 export default function CartDrawer() {
@@ -23,7 +22,6 @@ export default function CartDrawer() {
   const updateQuantity = useCart((s) => s.updateQuantity);
   const removeItem = useCart((s) => s.removeItem);
   const subtotal = useCart((s) => s.subtotal());
-  const total = useCart((s) => s.total());
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -130,20 +128,16 @@ export default function CartDrawer() {
 
             <SheetFooter className="gap-3 border-t border-black/5 bg-white">
               <div className="flex flex-col gap-1.5 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                <div className="flex justify-between text-base font-semibold text-black">
+                  <span>Subtotal</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Delivery</span>
-                  <span>{formatCurrency(DELIVERY_CHARGE)}</span>
-                </div>
-                <Separator className="my-1" />
-                <div className="flex justify-between text-base font-semibold text-black">
-                  <span>Total</span>
-                  <span>{formatCurrency(total)}</span>
-                </div>
+                <p className="text-xs text-muted-foreground">
+                  Delivery charge is calculated at checkout based on your
+                  district.
+                </p>
               </div>
+              <Separator className="mt-1" />
               <Link href="/checkout" className="w-full" onClick={closeCart}>
                 <Button className="h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black">
                   Checkout

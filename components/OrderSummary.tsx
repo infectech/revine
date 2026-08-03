@@ -3,13 +3,18 @@
 import Image from "next/image";
 import { useCart } from "@/hooks/use-cart";
 import { Separator } from "@/components/ui/separator";
-import { DELIVERY_CHARGE } from "@/lib/config";
+import { getDeliveryCharge } from "@/lib/config";
 import { formatCurrency } from "@/lib/utils";
 
-export default function OrderSummary() {
+interface OrderSummaryProps {
+  district?: string;
+}
+
+export default function OrderSummary({ district }: OrderSummaryProps) {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
-  const total = useCart((s) => s.total());
+  const deliveryCharge = district ? getDeliveryCharge(district) : null;
+  const total = subtotal + (deliveryCharge ?? 0);
 
   return (
     <div className="rounded-3xl border border-black/5 bg-white p-5 sm:p-6 lg:sticky lg:top-24">
@@ -50,7 +55,15 @@ export default function OrderSummary() {
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Delivery</span>
-          <span>{formatCurrency(DELIVERY_CHARGE)}</span>
+          <span>
+            {deliveryCharge !== null ? (
+              formatCurrency(deliveryCharge)
+            ) : (
+              <span className="text-xs text-muted-foreground">
+                Select district
+              </span>
+            )}
+          </span>
         </div>
         <Separator className="my-1" />
         <div className="flex justify-between text-base font-semibold text-black">

@@ -5,9 +5,37 @@ export const SITE_CONFIG = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://revine.example.com",
 };
 
-export const DELIVERY_CHARGE = Number(
-  process.env.NEXT_PUBLIC_DELIVERY_CHARGE ?? 120
-);
+export const DELIVERY_CHARGE_DHAKA = 70;
+export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 120;
+
+export const DISTRICTS = [
+  "Dhaka",
+  "Gazipur",
+  "Narayanganj",
+  "Chattogram",
+  "Cumilla",
+  "Rajshahi",
+  "Khulna",
+  "Sylhet",
+  "Barishal",
+  "Rangpur",
+  "Mymensingh",
+  "Bogura",
+  "Cox's Bazar",
+  "Jessore",
+  "Dinajpur",
+  "Faridpur",
+  "Tangail",
+  "Narsingdi",
+  "Noakhali",
+  "Kishoreganj",
+] as const;
+
+export function getDeliveryCharge(district: string): number {
+  return district.trim().toLowerCase() === "dhaka"
+    ? DELIVERY_CHARGE_DHAKA
+    : DELIVERY_CHARGE_OUTSIDE_DHAKA;
+}
 
 export const SIZE_CHART = [
   { size: "L", chest: 42, length: 29 },
