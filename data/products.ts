@@ -1,6 +1,7 @@
 import { Product } from "@/types";
 import { SALE_PRICE } from "@/lib/pricing";
 
+<<<<<<< HEAD
 const PRODUCT_DESCRIPTION = `### Shirt Details
 - Export Quality Premium Shirt
 - 100% Cotton Fabric
@@ -20,14 +21,29 @@ const PRODUCT_DESCRIPTION = `### Shirt Details
 - Outside Dhaka: 2–3 working days
 *Note: Delivery may occasionally be delayed due to unforeseen circumstances or courier-related issues.*`;
 
+=======
+>>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
 const productPhotoNumbers = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23, 24, 25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 ];
 
-export const products: Product[] = productPhotoNumbers.map((photoNumber, index) => {
-  const code = `RR${String(photoNumber).padStart(2, "0")}`;
+const productNames: Record<number, string> = {
+  1: "Urban Check",
+  4: "Midnight Plaid",
+  7: "Classic Grid",
+  10: "Shadow Check",
+  13: "Royal Plaid",
+  16: "Streetline Check",
+  19: "Vintage Grid",
+  22: "Bold Check",
+  25: "Urban Plaid",
+  31: "Heritage Check",
+  34: "Monarch Grid",
+  37: "Rugged Check",
+};
 
+<<<<<<< HEAD
   return {
     id: index + 1,
     code,
@@ -39,6 +55,33 @@ export const products: Product[] = productPhotoNumbers.map((photoNumber, index) 
     ],
   };
 });
+=======
+export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
+  (acc, photoNumber, index) => {
+    const groupIndex = Math.floor(index / 3);
+    if (index % 3 === 0) {
+      const code = `RR${String(groupIndex + 1).padStart(2, "0")}`;
+      acc.push({
+        id: groupIndex + 1,
+        code,
+        name: productNames[photoNumber] ?? `Rookies DNMCO Tee ${String(photoNumber).padStart(2, "0")}`,
+        description: `Fabric: 100% Cotton\nGSM: 210–230 GSM\nQuality: Export Quality\nComfort: All-Season Friendly\nFeel: Soft, Comfortable & Breathable\nSuitable For: Everyday & Casual Wear\n\nWash Care:\nMachine or hand wash with cold/normal water.\nUse mild detergent.\nDo not bleach.\nWash inside out.\nAvoid direct sunlight while drying.\nIron on medium heat.\nDo not tumble dry.`,
+        price: SALE_PRICE,
+        images: [
+          `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,
+        ],
+      });
+    } else {
+      const last = acc[acc.length - 1];
+      last.images.push(
+        `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`
+      );
+    }
+    return acc;
+  },
+  []
+);
+>>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
 
 export function getProductByCode(code: string): Product | undefined {
   return products.find((p) => p.code === code);

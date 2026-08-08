@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
 import { products } from "@/data/products";
@@ -28,15 +26,21 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden bg-black px-4 py-24 text-center text-white sm:px-6 sm:py-32 lg:px-8">
+      <section className="relative flex h-[45vh] min-h-[320px] items-center justify-center overflow-hidden bg-black sm:h-[70vh]">
         <Image
+<<<<<<< HEAD
           src="/products/rookies 05-08-26 RR 01.png"
           alt="Rookies DNMCO premium shirt"
+=======
+          src="/hero.png"
+          alt="Rookies DNMCO premium T-shirt"
+>>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-45"
+          className="object-cover object-center"
         />
+<<<<<<< HEAD
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/35 to-black/80" />
         <motion.p
           initial={{ opacity: 0, y: 12 }}
@@ -78,6 +82,8 @@ export default function Home() {
             </Button>
           </a>
         </motion.div>
+=======
+>>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
       </section>
 
       <section id="products" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

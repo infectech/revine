@@ -17,6 +17,12 @@ import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
+<<<<<<< HEAD
+=======
+  hasMultiBuyDiscount,
+  PROMO_DELIVERY_CHARGE,
+  ORIGINAL_PRICE,
+>>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -146,6 +152,12 @@ export default function CartDrawer() {
                   <span>Subtotal</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
+                {unitPrice < ORIGINAL_PRICE && (
+                  <div className="flex justify-between text-sm font-medium text-[#E53935]">
+                    <span>You save</span>
+                    <span>{formatCurrency((ORIGINAL_PRICE - unitPrice) * cartQuantity)}</span>
+                  </div>
+                )}
                 <p className="text-xs text-muted-foreground">
                   Delivery charge is calculated at checkout based on your district.
                 </p>
