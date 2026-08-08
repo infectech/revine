@@ -31,7 +31,7 @@ export default function Home() {
       <section className="relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden bg-black px-4 py-24 text-center text-white sm:px-6 sm:py-32 lg:px-8">
         <Image
           src="/products/rookies 05-08-26 RR 01.png"
-          alt="Rookies DNMCO premium T-shirt"
+          alt="Rookies DNMCO premium shirt"
           fill
           priority
           sizes="100vw"
@@ -52,7 +52,7 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="font-heading relative mt-4 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl"
         >
-          Rookies DNMCO Premium T-Shirts
+          Rookies DNMCO Premium Shirts
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -60,8 +60,8 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
         >
-          Export quality cotton, durable stitching, and automatic multibuy
-          savings. Cash on delivery, nationwide.
+          Export quality cotton, durable stitching, and premium comfort. 
+          Cash on delivery, nationwide.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -83,10 +83,10 @@ export default function Home() {
       <section id="products" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="font-heading text-3xl font-semibold text-black">
-            Shop All T-Shirts
+            Shop All Shirts
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Buy 2 or more for ৳600 per shirt plus ৳50 delivery.
+            Premium quality shirts with cash on delivery available anywhere in Bangladesh.
           </p>
         </div>
 

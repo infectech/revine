@@ -33,13 +33,19 @@ export function Footer() {
             <h4 className="text-sm font-semibold uppercase tracking-wider text-gold">
               Contact
             </h4>
-            <p className="mt-3 text-sm leading-relaxed text-white/60">
-              WhatsApp / Phone: 01XXXXXXXXX
-              <br />
-              Email: support@rookies-dnmco.example.com
-              <br />
-              Address: {SITE_CONFIG.address}
-            </p>
+            <div className="mt-3 flex flex-col gap-2 text-sm leading-relaxed text-white/60">
+              <p>
+                Phone: <a href="tel:01777548390" className="hover:text-gold transition-colors">01777548390</a>,{" "}
+                <a href="tel:01400550357" className="hover:text-gold transition-colors">01400550357</a>
+              </p>
+              <p>
+                WhatsApp: <a href="https://wa.me/8801400550357" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">01400550357</a>
+              </p>
+              <p>
+                Email: <a href="mailto:rookiesdnmco@gmail.com" className="hover:text-gold transition-colors">rookiesdnmco@gmail.com</a>
+              </p>
+              <p>Address: {SITE_CONFIG.address}</p>
+            </div>
           </div>
         </div>
 

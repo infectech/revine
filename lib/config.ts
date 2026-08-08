@@ -6,35 +6,32 @@ export const SITE_CONFIG = {
   address: "Dhaka, Mirpur-13, Jabbar Morr",
 };
 
-export const DELIVERY_CHARGE_DHAKA = 70;
-export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 120;
+export const DELIVERY_CHARGE_DHAKA = 50;
+export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 80;
 
 export const DISTRICTS = [
-  "Dhaka",
-  "Gazipur",
-  "Narayanganj",
-  "Chattogram",
-  "Cumilla",
-  "Rajshahi",
-  "Khulna",
-  "Sylhet",
-  "Barishal",
-  "Rangpur",
-  "Mymensingh",
-  "Bogura",
-  "Cox's Bazar",
-  "Jessore",
-  "Dinajpur",
-  "Faridpur",
-  "Tangail",
-  "Narsingdi",
-  "Noakhali",
-  "Kishoreganj",
+  "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogura",
+  "Brahmanbaria", "Chandpur", "Chapainawabganj", "Chattogram", "Chuadanga",
+  "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni",
+  "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore",
+  "Jhalokathi", "Jhenaidah", "Joypurhat", "Khagrachhari", "Khulna",
+  "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat",
+  "Madaripur", "Magura", "Manikganj", "Meherpur", "Moulvibazar", "Munshiganj",
+  "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore",
+  "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali",
+  "Pirojpur", "Rajbari", "Rajshahi", "Rangamati", "Rangpur", "Satkhira",
+  "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail",
+  "Thakurgaon"
 ] as const;
 
-export function getDeliveryCharge(district: string, itemCount = 0): number {
-  if (itemCount >= 2) return 50;
+export const CONTACT_INFO = {
+  phone1: "01777548390",
+  phone2: "01400550357",
+  whatsapp: "01400550357",
+  email: "rookiesdnmco@gmail.com",
+};
 
+export function getDeliveryCharge(district: string, itemCount = 0): number {
   return district.trim().toLowerCase() === "dhaka"
     ? DELIVERY_CHARGE_DHAKA
     : DELIVERY_CHARGE_OUTSIDE_DHAKA;

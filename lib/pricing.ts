@@ -1,10 +1,7 @@
 import { CartItem } from "@/types";
 
-export const ORIGINAL_PRICE = 1200;
-export const SALE_PRICE = 700;
-export const MULTI_BUY_PRICE = 600;
-export const MULTI_BUY_MIN_QUANTITY = 2;
-export const PROMO_DELIVERY_CHARGE = 50;
+export const ORIGINAL_PRICE = 1500;
+export const SALE_PRICE = 1200;
 
 export function getDiscountPercent(
   originalPrice = ORIGINAL_PRICE,
@@ -17,12 +14,8 @@ export function getCartQuantity(items: Pick<CartItem, "quantity">[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-export function getPromoUnitPrice(quantity: number) {
-  return quantity >= MULTI_BUY_MIN_QUANTITY ? MULTI_BUY_PRICE : SALE_PRICE;
-}
-
 export function getCartUnitPrice(items: Pick<CartItem, "quantity">[]) {
-  return getPromoUnitPrice(getCartQuantity(items));
+  return SALE_PRICE;
 }
 
 export function getCartSubtotal(items: Pick<CartItem, "quantity">[]) {
@@ -38,14 +31,12 @@ export function getLineTotal(
 }
 
 export function hasMultiBuyDiscount(items: Pick<CartItem, "quantity">[]) {
-  return getCartQuantity(items) >= MULTI_BUY_MIN_QUANTITY;
+  return false;
 }
 
 export function getDeliveryChargeForItems(
   district: string,
   items: Pick<CartItem, "quantity">[]
 ) {
-  if (hasMultiBuyDiscount(items)) return PROMO_DELIVERY_CHARGE;
-
-  return district.trim().toLowerCase() === "dhaka" ? 70 : 120;
+  return district.trim().toLowerCase() === "dhaka" ? 50 : 80;
 }

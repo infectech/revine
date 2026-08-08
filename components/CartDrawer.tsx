@@ -17,8 +17,6 @@ import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-  hasMultiBuyDiscount,
-  PROMO_DELIVERY_CHARGE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -31,7 +29,6 @@ export default function CartDrawer() {
   const subtotal = useCart((s) => s.subtotal());
   const cartQuantity = getCartQuantity(items);
   const unitPrice = getCartUnitPrice(items);
-  const promoDeliveryApplies = hasMultiBuyDiscount(items);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -141,7 +138,7 @@ export default function CartDrawer() {
               <div className="flex flex-col gap-1.5 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {cartQuantity >= 2 ? "Promo unit price" : "Unit price"}
+                    Unit price
                   </span>
                   <span>{formatCurrency(unitPrice)}</span>
                 </div>
@@ -150,11 +147,7 @@ export default function CartDrawer() {
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {promoDeliveryApplies
-                    ? `Delivery promo applied: ${formatCurrency(
-                        PROMO_DELIVERY_CHARGE
-                      )} for 2 or more shirts.`
-                    : "Delivery charge is calculated at checkout based on your district."}
+                  Delivery charge is calculated at checkout based on your district.
                 </p>
               </div>
               <Separator className="mt-1" />

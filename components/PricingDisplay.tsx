@@ -21,14 +21,14 @@ export default function PricingDisplay({
       </span>
       <span
         className={cn(
-          "font-bold text-black",
+          "font-bold text-[#E53935]",
           compact ? "text-sm sm:text-base" : "text-xl"
         )}
       >
         {formatCurrency(SALE_PRICE)}
       </span>
       <span className="rounded-full bg-[#E53935]/10 px-2 py-0.5 text-[11px] font-bold text-[#E53935]">
-        {getDiscountPercent()}% OFF
+        Special Offer
       </span>
     </div>
   );

@@ -9,7 +9,8 @@ import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-  hasMultiBuyDiscount,
+  ORIGINAL_PRICE,
+  SALE_PRICE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -25,9 +26,7 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
   const itemCount = getCartQuantity(items);
   const unitPrice = getCartUnitPrice(items);
   const deliveryCharge =
-    district || hasMultiBuyDiscount(items)
-      ? getDeliveryCharge(district || "Dhaka", itemCount)
-      : null;
+    district ? getDeliveryCharge(district, itemCount) : null;
   const total = subtotal + (deliveryCharge ?? 0);
 
   return (
@@ -100,12 +99,12 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
       <Separator className="my-4" />
       <div className="flex flex-col gap-1.5 text-sm">
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Unit price</span>
-          <span>{formatCurrency(unitPrice)}</span>
+          <span className="text-muted-foreground">Regular Price</span>
+          <span className="line-through">{formatCurrency(ORIGINAL_PRICE * Math.max(1, itemCount))}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Subtotal</span>
-          <span>{formatCurrency(subtotal)}</span>
+        <div className="flex justify-between font-medium text-[#E53935]">
+          <span>Offer Price</span>
+          <span>{formatCurrency(subtotal || SALE_PRICE)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Delivery</span>

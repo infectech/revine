@@ -102,9 +102,8 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
         </Button>
         <Button
           type="button"
-          variant="ghost"
           onClick={() => onSelect(product)}
-          className="h-8 rounded-full text-xs text-muted-foreground hover:text-black"
+          className="h-8 rounded-full bg-[#E53935]/10 text-xs font-semibold text-[#E53935] transition-all hover:bg-[#E53935] hover:text-white sm:mt-1 sm:h-9"
         >
           View Details
         </Button>

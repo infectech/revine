@@ -125,17 +125,36 @@ export default function ProductModal({
             </div>
 
             <div className="text-sm leading-relaxed text-muted-foreground">
-              <p className="font-semibold text-black">
-                Export Quality Premium T-Shirt
-              </p>
-              <ul className="mt-2 list-disc space-y-1 pl-5">
-                {product.description
-                  .split("\n")
-                  .slice(1)
-                  .map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-              </ul>
+              {product.description.split("\n").map((line, i) => {
+                if (line.startsWith("### ")) {
+                  return (
+                    <h3 key={i} className="mt-4 mb-2 font-semibold text-black first:mt-0">
+                      {line.replace("### ", "")}
+                    </h3>
+                  );
+                }
+                if (line.startsWith("- ")) {
+                  return (
+                    <ul key={i} className="list-disc pl-5">
+                      <li>{line.replace("- ", "")}</li>
+                    </ul>
+                  );
+                }
+                if (line.startsWith("*") && line.endsWith("*")) {
+                  return (
+                    <p key={i} className="mt-2 text-xs italic">
+                      {line.replaceAll("*", "")}
+                    </p>
+                  );
+                }
+                if (line.trim() === "") return null;
+                
+                return (
+                  <p key={i} className="mt-1">
+                    {line}
+                  </p>
+                );
+              })}
             </div>
 
             <div>
