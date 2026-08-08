@@ -8,12 +8,25 @@
  * Copy the deployment URL into GOOGLE_SHEET_WEBHOOK_URL in .env.local.
  *
  * Sheet must have a header row (row 1) with these columns in order:
- * Order ID | Date | Product Codes + Sizes | Product Names | Quantity |
- * Customer Name | Phone | Address | District | Area | Delivery Charge |
- * Total Bill | Status
+ * Order ID | Date | Phone | Product Codes + Sizes | Total Bill |
+ * Product Names | Quantity | Customer Name | Address | District | Area |
+ * Delivery Charge | Status
+ *
+ * DAILY SHEETS: Run installDailyTrigger() once from the Apps Script editor
+ * to set up the 7 pm automatic daily sheet creation.
  */
 
-const SHEET_NAME = "Orders";
+const BASE_SHEET_NAME = "Orders";
+
+/** Returns today's sheet name, e.g. "Orders 2026-08-09" */
+function getTodaySheetName() {
+  const today = Utilities.formatDate(
+    new Date(),
+    Session.getScriptTimeZone() || "Asia/Dhaka",
+    "yyyy-MM-dd"
+  );
+  return BASE_SHEET_NAME + " " + today;
+}
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -67,26 +80,49 @@ function doPost(e) {
 
 function getSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(SHEET_NAME);
+  const sheetName = getTodaySheetName();
+  let sheet = ss.getSheetByName(sheetName);
 
   if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow([
-      "Order ID",
-      "Date",
-      "Phone",
-      "Product Codes + Sizes",
-      "Total Bill",
-      "Product Names",
-      "Quantity",
-      "Customer Name",
-      "Address",
-      "District",
-      "Area",
-      "Delivery Charge",
-      "Status",
-    ]);
+    sheet = createDailySheet();
   }
+
+  return sheet;
+}
+
+/**
+ * Creates a new sheet for today with the full header row.
+ * Called automatically every day at 7 pm by the time-driven trigger,
+ * and also on demand when an order arrives and today's sheet is missing.
+ */
+function createDailySheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheetName = getTodaySheetName();
+
+  let sheet = ss.getSheetByName(sheetName);
+  if (sheet) return sheet; // already exists
+
+  sheet = ss.insertSheet(sheetName);
+  sheet.appendRow([
+    "Order ID",
+    "Date",
+    "Phone",
+    "Product Codes + Sizes",
+    "Total Bill",
+    "Product Names",
+    "Quantity",
+    "Customer Name",
+    "Address",
+    "District",
+    "Area",
+    "Delivery Charge",
+    "Status",
+  ]);
+
+  // Bold & freeze header row
+  const headerRange = sheet.getRange(1, 1, 1, 13);
+  headerRange.setFontWeight("bold");
+  sheet.setFrozenRows(1);
 
   return sheet;
 }
@@ -122,3 +158,27 @@ function jsonResponse(obj) {
     ContentService.MimeType.JSON
   );
 }
+
+/**
+ * Run this function ONCE from the Apps Script editor (Run > installDailyTrigger)
+ * to register the 7 pm daily trigger. Do NOT run it repeatedly or you'll get
+ * duplicate triggers.
+ */
+function installDailyTrigger() {
+  // Remove any existing daily triggers to avoid duplicates
+  ScriptApp.getProjectTriggers().forEach((t) => {
+    if (t.getHandlerFunction() === "createDailySheet") {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+
+  ScriptApp.newTrigger("createDailySheet")
+    .timeBased()
+    .everyDays(1)
+    .atHour(19) // 7 pm
+    .inTimezone("Asia/Dhaka")
+    .create();
+
+  Logger.log("Daily 7 pm trigger installed successfully.");
+}
+

@@ -16,13 +16,7 @@ const PRODUCT_DESCRIPTION = `### Shirt Details
 - Machine or hand wash with cold/normal water.
 - Use mild detergent.
 - Do not bleach.
-- Wash inside out.
 - Avoid direct sunlight while drying.
-- Iron on medium heat.
-- Do not tumble dry.
-
-### Available Sizes
-- S, M, L, XL, XXL
 
 ### Delivery Information
 - Inside Dhaka: 1–2 working days
