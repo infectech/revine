@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function Footer() {
@@ -6,9 +7,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <h3 className="font-heading text-xl font-semibold tracking-tight text-white">
-              REVINE
-            </h3>
+            <Image
+              src="/logo white.png"
+              alt={SITE_CONFIG.name}
+              width={164}
+              height={48}
+              className="h-12 w-auto object-contain"
+            />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
               {SITE_CONFIG.description}
             </p>
@@ -31,7 +36,9 @@ export function Footer() {
             <p className="mt-3 text-sm leading-relaxed text-white/60">
               WhatsApp / Phone: 01XXXXXXXXX
               <br />
-              Email: support@revine.example.com
+              Email: support@rookies-dnmco.example.com
+              <br />
+              Address: {SITE_CONFIG.address}
             </p>
           </div>
         </div>

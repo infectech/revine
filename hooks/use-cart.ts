@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { CartItem, Size } from "@/types";
+import { getCartSubtotal } from "@/lib/pricing";
 
 interface CartState {
   items: CartItem[];
@@ -59,8 +60,7 @@ export const useCart = create<CartState>()(
                 ),
         })),
       clearCart: () => set({ items: [] }),
-      subtotal: () =>
-        get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+      subtotal: () => getCartSubtotal(get().items),
       itemCount: () =>
         get().items.reduce((sum, i) => sum + i.quantity, 0),
     }),

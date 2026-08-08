@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { SITE_CONFIG } from "@/lib/config";
 
 interface OrderSuccessProps {
   orderId: string;
@@ -26,8 +27,8 @@ export default function OrderSuccess({ orderId }: OrderSuccessProps) {
         Order Successfully Placed
       </h2>
       <p className="text-sm text-muted-foreground">
-        Thank you for shopping with Revine. Our representative will call you
-        shortly to confirm delivery.
+        Thank you for shopping with {SITE_CONFIG.name}. Our representative will
+        call you shortly to confirm delivery.
       </p>
       <p className="rounded-full bg-muted px-4 py-1.5 text-sm font-medium text-black">
         Your Order ID: {orderId}

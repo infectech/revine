@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  getCartQuantity,
+  getCartUnitPrice,
+  getLineTotal,
+  hasMultiBuyDiscount,
+  PROMO_DELIVERY_CHARGE,
+} from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
 export default function CartDrawer() {
@@ -22,6 +29,9 @@ export default function CartDrawer() {
   const updateQuantity = useCart((s) => s.updateQuantity);
   const removeItem = useCart((s) => s.removeItem);
   const subtotal = useCart((s) => s.subtotal());
+  const cartQuantity = getCartQuantity(items);
+  const unitPrice = getCartUnitPrice(items);
+  const promoDeliveryApplies = hasMultiBuyDiscount(items);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -91,9 +101,10 @@ export default function CartDrawer() {
                               updateQuantity(
                                 item.productCode,
                                 item.size,
-                                item.quantity - 1
+                                Math.max(1, item.quantity - 1)
                               )
                             }
+                            disabled={item.quantity <= 1}
                             aria-label="Decrease quantity"
                           >
                             <Minus className="size-3" />
@@ -117,7 +128,7 @@ export default function CartDrawer() {
                           </button>
                         </div>
                         <p className="text-sm font-medium text-black">
-                          {formatCurrency(item.price * item.quantity)}
+                          {formatCurrency(getLineTotal(item, items))}
                         </p>
                       </div>
                     </div>
@@ -128,13 +139,22 @@ export default function CartDrawer() {
 
             <SheetFooter className="gap-3 border-t border-black/5 bg-white">
               <div className="flex flex-col gap-1.5 text-sm">
+                <div className="flex justify-between text-muted-foreground">
+                  <span>
+                    {cartQuantity >= 2 ? "Promo unit price" : "Unit price"}
+                  </span>
+                  <span>{formatCurrency(unitPrice)}</span>
+                </div>
                 <div className="flex justify-between text-base font-semibold text-black">
                   <span>Subtotal</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Delivery charge is calculated at checkout based on your
-                  district.
+                  {promoDeliveryApplies
+                    ? `Delivery promo applied: ${formatCurrency(
+                        PROMO_DELIVERY_CHARGE
+                      )} for 2 or more shirts.`
+                    : "Delivery charge is calculated at checkout based on your district."}
                 </p>
               </div>
               <Separator className="mt-1" />

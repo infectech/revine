@@ -15,6 +15,7 @@ interface ProductSliderProps {
   alt: string;
   className?: string;
   imageClassName?: string;
+  priority?: boolean;
   onApiChange?: (api: ProductSliderApi | null) => void;
   onSlideChange?: (index: number) => void;
 }
@@ -24,6 +25,7 @@ export default function ProductSlider({
   alt,
   className,
   imageClassName,
+  priority = false,
   onApiChange,
   onSlideChange,
 }: ProductSliderProps) {
@@ -69,7 +71,7 @@ export default function ProductSlider({
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover"
-                  priority={i === 0}
+                  priority={priority && i === 0}
                 />
               </div>
             </div>

@@ -1,10 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Product } from "@/types";
+import { toast } from "sonner";
+import { ShoppingCart } from "lucide-react";
+import { Product, Size } from "@/types";
 import { Button } from "@/components/ui/button";
 import ProductSlider from "@/components/ProductSlider";
-import { formatCurrency } from "@/lib/utils";
+import PricingDisplay from "@/components/PricingDisplay";
+import { useCart } from "@/hooks/use-cart";
+import { trackAddToCart } from "@/lib/pixel";
+import { SALE_PRICE } from "@/lib/pricing";
+import { cn } from "@/lib/utils";
 
 export interface ProductCardProps {
   product: Product;
@@ -13,6 +20,27 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) {
+  const [size, setSize] = useState<Size>("L");
+  const addItem = useCart((s) => s.addItem);
+  const sizes: Size[] = ["M", "L", "XL", "XXL"];
+
+  const handleAddToCart = () => {
+    const item = {
+      productCode: product.code,
+      productName: product.name,
+      size,
+      quantity: 1,
+      price: SALE_PRICE,
+      image: product.images[0],
+    };
+
+    addItem(item);
+    trackAddToCart(item);
+    toast.success("Product added to cart successfully!", {
+      description: `${product.name} - Size ${size}`,
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -44,13 +72,39 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
         <p className="text-[10px] uppercase tracking-wider text-muted-foreground sm:text-xs">
           {product.code}
         </p>
-        <p className="mt-0.5 text-sm font-semibold text-black sm:mt-1 sm:text-base">
-          {formatCurrency(product.price)}
-        </p>
+        <PricingDisplay compact className="mt-1" />
+
+        <div className="mt-2 grid grid-cols-4 gap-1">
+          {sizes.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => setSize(option)}
+              className={cn(
+                "h-7 rounded-full border text-[11px] font-semibold transition-colors",
+                size === option
+                  ? "border-black bg-black text-white"
+                  : "border-black/10 bg-muted text-black hover:border-black/30"
+              )}
+              aria-pressed={size === option}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
 
         <Button
-          onClick={() => onSelect(product)}
+          onClick={handleAddToCart}
           className="mt-2 h-9 w-full rounded-full bg-black text-xs text-white transition-colors hover:bg-gold hover:text-black sm:mt-3 sm:h-11 sm:text-sm"
+        >
+          <ShoppingCart className="size-4" />
+          Add to Cart
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => onSelect(product)}
+          className="h-8 rounded-full text-xs text-muted-foreground hover:text-black"
         >
           View Details
         </Button>

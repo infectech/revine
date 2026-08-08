@@ -1,9 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Separator } from "@/components/ui/separator";
 import { getDeliveryCharge } from "@/lib/config";
+import {
+  getCartQuantity,
+  getCartUnitPrice,
+  getLineTotal,
+  hasMultiBuyDiscount,
+} from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
 interface OrderSummaryProps {
@@ -13,7 +20,14 @@ interface OrderSummaryProps {
 export default function OrderSummary({ district }: OrderSummaryProps) {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
-  const deliveryCharge = district ? getDeliveryCharge(district) : null;
+  const updateQuantity = useCart((s) => s.updateQuantity);
+  const removeItem = useCart((s) => s.removeItem);
+  const itemCount = getCartQuantity(items);
+  const unitPrice = getCartUnitPrice(items);
+  const deliveryCharge =
+    district || hasMultiBuyDiscount(items)
+      ? getDeliveryCharge(district || "Dhaka", itemCount)
+      : null;
   const total = subtotal + (deliveryCharge ?? 0);
 
   return (
@@ -38,17 +52,57 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
                 {item.productName}
               </p>
               <p className="text-xs text-muted-foreground">
-                Size: {item.size} &middot; Qty: {item.quantity}
+                Size: {item.size}
               </p>
+              <div className="mt-1 flex items-center gap-2">
+                <button
+                  type="button"
+                  className="flex size-6 items-center justify-center rounded-full border border-black/15 hover:bg-muted disabled:opacity-40"
+                  onClick={() =>
+                    updateQuantity(
+                      item.productCode,
+                      item.size,
+                      Math.max(1, item.quantity - 1)
+                    )
+                  }
+                  disabled={item.quantity <= 1}
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="size-3" />
+                </button>
+                <span className="w-5 text-center text-sm">{item.quantity}</span>
+                <button
+                  type="button"
+                  className="flex size-6 items-center justify-center rounded-full border border-black/15 hover:bg-muted"
+                  onClick={() =>
+                    updateQuantity(item.productCode, item.size, item.quantity + 1)
+                  }
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="size-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeItem(item.productCode, item.size)}
+                  className="ml-1 text-muted-foreground transition-colors hover:text-destructive"
+                  aria-label="Remove item"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
             </div>
             <p className="self-center text-sm font-medium text-black">
-              {formatCurrency(item.price * item.quantity)}
+              {formatCurrency(getLineTotal(item, items))}
             </p>
           </div>
         ))}
       </div>
       <Separator className="my-4" />
       <div className="flex flex-col gap-1.5 text-sm">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Unit price</span>
+          <span>{formatCurrency(unitPrice)}</span>
+        </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Subtotal</span>
           <span>{formatCurrency(subtotal)}</span>

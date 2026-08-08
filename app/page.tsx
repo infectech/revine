@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +20,6 @@ export default function Home() {
   const itemCount = useCart((s) => s.itemCount());
   const subtotal = useCart((s) => s.subtotal());
   const openCart = useCart((s) => s.openCart);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleSelect = (product: Product) => {
     setSelectedProduct(product);
@@ -32,12 +28,21 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex flex-col items-center justify-center overflow-hidden bg-black px-4 py-28 text-center text-white sm:px-6 sm:py-36 lg:px-8">
+      <section className="relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden bg-black px-4 py-24 text-center text-white sm:px-6 sm:py-32 lg:px-8">
+        <Image
+          src="/products/rookies 05-08-26 RR 01.png"
+          alt="Rookies DNMCO premium T-shirt"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-45"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/35 to-black/80" />
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-xs font-semibold uppercase tracking-[0.3em] text-gold"
+          className="relative text-xs font-semibold uppercase tracking-[0.3em] text-gold"
         >
           Designed in Bangladesh
         </motion.p>
@@ -45,24 +50,24 @@ export default function Home() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading mt-4 max-w-2xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl"
+          className="font-heading relative mt-4 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl"
         >
-          Premium Everyday Shirts
+          Rookies DNMCO Premium T-Shirts
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-5 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg"
+          className="relative mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
         >
-          Crafted with premium cotton, tailored fits, and finishes built for
-          everyday confidence. Cash on delivery, nationwide.
+          Export quality cotton, durable stitching, and automatic multibuy
+          savings. Cash on delivery, nationwide.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-8"
+          className="relative mt-8"
         >
           <a href="#products">
             <Button
@@ -78,10 +83,10 @@ export default function Home() {
       <section id="products" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="font-heading text-3xl font-semibold text-black">
-            Shop All Shirts
+            Shop All T-Shirts
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Ten signature colorways. One consistent standard of quality.
+            Buy 2 or more for ৳600 per shirt plus ৳50 delivery.
           </p>
         </div>
 
@@ -103,7 +108,7 @@ export default function Home() {
         onOpenChange={setModalOpen}
       />
 
-      {mounted && itemCount > 0 && (
+      {itemCount > 0 && (
         <button
           type="button"
           onClick={openCart}

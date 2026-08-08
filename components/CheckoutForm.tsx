@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, PhoneCall } from "lucide-react";
+import { Loader2, PackageCheck, PhoneCall } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useCart } from "@/hooks/use-cart";
 import { DISTRICTS, getDeliveryCharge } from "@/lib/config";
+import { getCartQuantity, getCartUnitPrice } from "@/lib/pricing";
 import { trackPurchase } from "@/lib/pixel";
 import { OrderPayload, OrderResponse } from "@/types";
 
@@ -71,7 +72,9 @@ export default function CheckoutForm({
     if (items.length === 0) return;
     setSubmitting(true);
 
-    const deliveryCharge = getDeliveryCharge(values.district);
+    const itemCount = getCartQuantity(items);
+    const unitPrice = getCartUnitPrice(items);
+    const deliveryCharge = getDeliveryCharge(values.district, itemCount);
     const total = subtotal + deliveryCharge;
 
     const payload: OrderPayload = {
@@ -88,7 +91,7 @@ export default function CheckoutForm({
         productName: i.productName,
         size: i.size,
         quantity: i.quantity,
-        price: i.price,
+        price: unitPrice,
       })),
       deliveryCharge,
       total,
@@ -234,6 +237,33 @@ export default function CheckoutForm({
           {...register("note")}
         />
       </div>
+
+      <section className="rounded-2xl border border-[#E53935]/15 bg-[#E53935]/5 p-4">
+        <div className="flex items-start gap-2">
+          <PackageCheck className="mt-0.5 size-4 shrink-0 text-[#E53935]" />
+          <div>
+            <h3 className="text-sm font-semibold text-black">
+              Rookies DNMCO - Return & Exchange Policy
+            </h3>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-muted-foreground">
+              <li>10 Days Easy Exchange.</li>
+              <li>
+                Check your parcel in front of the delivery person before
+                accepting.
+              </li>
+              <li>No return after the delivery person leaves.</li>
+              <li>
+                Exchange only for size issues, wrong product, or manufacturing
+                defects.
+              </li>
+              <li>
+                Courier charges for exchanges may apply unless the error is from
+                Rookies DNMCO.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
       <Button
         type="submit"

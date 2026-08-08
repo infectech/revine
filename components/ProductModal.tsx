@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import ProductSlider, { ProductSliderApi } from "@/components/ProductSlider";
 import SizeSelector from "@/components/SizeSelector";
 import SizeChart from "@/components/SizeChart";
+import PricingDisplay from "@/components/PricingDisplay";
 import { useCart } from "@/hooks/use-cart";
 import { trackAddToCart, trackViewContent } from "@/lib/pixel";
-import { cn, formatCurrency } from "@/lib/utils";
+import { SALE_PRICE } from "@/lib/pricing";
+import { cn } from "@/lib/utils";
 
 interface ProductModalProps {
   product: Product | null;
@@ -31,12 +33,10 @@ export default function ProductModal({
 
   useEffect(() => {
     if (open && product) {
-      setSize(null);
-      setActiveImage(0);
       trackViewContent({
         code: product.code,
         name: product.name,
-        price: product.price,
+        price: SALE_PRICE,
       });
     }
   }, [open, product]);
@@ -48,6 +48,14 @@ export default function ProductModal({
     sliderApiRef.current?.scrollTo(index);
   };
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setSize(null);
+      setActiveImage(0);
+    }
+    onOpenChange(nextOpen);
+  };
+
   const handleAddToCart = () => {
     if (!size) return;
     const item = {
@@ -55,19 +63,19 @@ export default function ProductModal({
       productName: product.name,
       size,
       quantity: 1,
-      price: product.price,
+      price: SALE_PRICE,
       image: product.images[0],
     };
     addItem(item);
     trackAddToCart(item);
-    toast.success("Added to cart", {
+    toast.success("Product added to cart successfully!", {
       description: `${product.name} (${size})`,
     });
     onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl sm:max-w-3xl">
         <DialogTitle className="sr-only">{product.name}</DialogTitle>
         <div className="grid gap-6 sm:grid-cols-2">
@@ -113,14 +121,22 @@ export default function ProductModal({
               <p className="text-xs uppercase tracking-wider text-muted-foreground">
                 {product.code}
               </p>
-              <p className="mt-2 text-lg font-semibold text-black">
-                {formatCurrency(product.price)}
-              </p>
+              <PricingDisplay className="mt-2" />
             </div>
 
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {product.description}
-            </p>
+            <div className="text-sm leading-relaxed text-muted-foreground">
+              <p className="font-semibold text-black">
+                Export Quality Premium T-Shirt
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5">
+                {product.description
+                  .split("\n")
+                  .slice(1)
+                  .map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+              </ul>
+            </div>
 
             <div>
               <p className="mb-2 text-sm font-medium text-black">
