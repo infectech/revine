@@ -28,14 +28,15 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-[100dvh] overflow-hidden bg-black sm:h-[85vh]">
+      <section className="w-full">
         <Image
           src="/hero.png"
           alt="Rookies DNMCO premium shirt"
-          fill
-          priority
+          width={0}
+          height={0}
           sizes="100vw"
-          className="object-cover object-center"
+          priority
+          className="h-auto w-full"
         />
       </section>
 
