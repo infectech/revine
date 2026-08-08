@@ -10,6 +10,7 @@ import {
   getCartUnitPrice,
   getLineTotal,
   hasMultiBuyDiscount,
+  ORIGINAL_PRICE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -107,6 +108,12 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
           <span className="text-muted-foreground">Subtotal</span>
           <span>{formatCurrency(subtotal)}</span>
         </div>
+        {unitPrice < ORIGINAL_PRICE && (
+          <div className="flex justify-between text-sm font-medium text-[#E53935]">
+            <span>You save</span>
+            <span>{formatCurrency((ORIGINAL_PRICE - unitPrice) * itemCount)}</span>
+          </div>
+        )}
         <div className="flex justify-between">
           <span className="text-muted-foreground">Delivery</span>
           <span>

@@ -26,14 +26,14 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-black px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <section className="relative flex h-[45vh] min-h-[320px] items-center justify-center overflow-hidden bg-black sm:h-[70vh]">
         <Image
           src="/hero.png"
           alt="Rookies DNMCO premium T-shirt"
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-center"
         />
       </section>
 

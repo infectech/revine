@@ -30,7 +30,7 @@ export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
         id: groupIndex + 1,
         code,
         name: productNames[photoNumber] ?? `Rookies DNMCO Tee ${String(photoNumber).padStart(2, "0")}`,
-        description: "Premium cotton T-shirt. 210-230 GSM. Export quality.",
+        description: `Fabric: 100% Cotton\nGSM: 210–230 GSM\nQuality: Export Quality\nComfort: All-Season Friendly\nFeel: Soft, Comfortable & Breathable\nSuitable For: Everyday & Casual Wear\n\nWash Care:\nMachine or hand wash with cold/normal water.\nUse mild detergent.\nDo not bleach.\nWash inside out.\nAvoid direct sunlight while drying.\nIron on medium heat.\nDo not tumble dry.`,
         price: SALE_PRICE,
         images: [
           `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,
