@@ -30,7 +30,7 @@ export default function Home() {
     <>
       <section className="relative flex min-h-[620px] flex-col items-center justify-center overflow-hidden bg-black px-4 py-24 text-center text-white sm:px-6 sm:py-32 lg:px-8">
         <Image
-          src="/products/rookies 05-08-26 RR 01.png"
+          src="/hero.png"
           alt="Rookies DNMCO premium T-shirt"
           fill
           priority

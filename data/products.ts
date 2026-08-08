@@ -13,20 +13,31 @@ const productPhotoNumbers = [
   22, 23, 24, 25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39,
 ];
 
-export const products: Product[] = productPhotoNumbers.map((photoNumber, index) => {
-  const code = `RR${String(photoNumber).padStart(2, "0")}`;
-
-  return {
-    id: index + 1,
-    code,
-    name: `Rookies DNMCO Premium T-Shirt ${String(photoNumber).padStart(2, "0")}`,
-    description: PRODUCT_DESCRIPTION,
-    price: SALE_PRICE,
-    images: [
-      `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,
-    ],
-  };
-});
+export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
+  (acc, photoNumber, index) => {
+    const groupIndex = Math.floor(index / 3);
+    if (index % 3 === 0) {
+      const code = `RR${String(photoNumber).padStart(2, "0")}`;
+      acc.push({
+        id: groupIndex + 1,
+        code,
+        name: `Rookies DNMCO Premium T-Shirt ${String(photoNumber).padStart(2, "0")}`,
+        description: PRODUCT_DESCRIPTION,
+        price: SALE_PRICE,
+        images: [
+          `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,
+        ],
+      });
+    } else {
+      const last = acc[acc.length - 1];
+      last.images.push(
+        `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`
+      );
+    }
+    return acc;
+  },
+  []
+);
 
 export function getProductByCode(code: string): Product | undefined {
   return products.find((p) => p.code === code);
