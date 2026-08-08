@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
@@ -8,6 +9,12 @@ import { useCart } from "@/hooks/use-cart";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function Header() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const itemCount = useCart((s) => s.itemCount());
   const openCart = useCart((s) => s.openCart);
 
@@ -25,6 +32,7 @@ export function Header() {
             height={40}
             priority
             className="h-10 w-auto object-contain"
+            style={{ width: "auto" }}
           />
         </Link>
 
@@ -48,7 +56,7 @@ export function Header() {
           className="relative h-10 w-10 rounded-full hover:bg-black/5"
         >
           <ShoppingBag className="size-5 text-black" />
-          {itemCount > 0 && (
+          {isMounted && itemCount > 0 && (
             <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[11px] font-semibold text-black">
               {itemCount}
             </span>

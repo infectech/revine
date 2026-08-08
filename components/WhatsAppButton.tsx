@@ -1,5 +1,3 @@
-import { MessageCircle } from "lucide-react";
-
 export function WhatsAppButton() {
   return (
     <a
@@ -9,7 +7,15 @@ export function WhatsAppButton() {
       className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-110 sm:bottom-8 sm:left-8"
       aria-label="Chat with us on WhatsApp"
     >
-      <MessageCircle className="size-8" />
+      {/* Official WhatsApp logo SVG */}
+      <svg
+        viewBox="0 0 32 32"
+        fill="currentColor"
+        className="size-8"
+        aria-hidden="true"
+      >
+        <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.13 6.742 3.047 9.371L1.051 31.02l5.824-1.867A15.93 15.93 0 0 0 16.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0Zm9.262 22.594c-.383 1.082-1.906 1.98-3.121 2.242-.832.176-1.918.316-5.57-1.195-4.676-1.93-7.684-6.676-7.918-6.984-.227-.308-1.91-2.543-1.91-4.852 0-2.309 1.195-3.437 1.648-3.898a1.743 1.743 0 0 1 1.242-.512c.308 0 .586.016.84.028.27.016.633-.102.992.758.383.883 1.297 3.18 1.41 3.41.117.23.195.5.04.809-.148.316-.227.512-.453.789-.227.273-.477.609-.68.816-.227.227-.464.473-.2.926.266.453 1.18 1.945 2.535 3.152 1.742 1.555 3.2 2.035 3.656 2.261.453.227.715.191.98-.114.273-.308 1.16-1.352 1.47-1.816.308-.465.617-.387 1.039-.234.43.156 2.71 1.277 3.172 1.508.46.226.77.34.883.527.113.188.113 1.09-.27 2.172Z" />
+      </svg>
     </a>
   );
 }

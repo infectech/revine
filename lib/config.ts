@@ -6,8 +6,9 @@ export const SITE_CONFIG = {
   address: "Dhaka, Mirpur-13, Jabbar Morr",
 };
 
-export const DELIVERY_CHARGE_DHAKA = 50;
-export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 80;
+export const DELIVERY_CHARGE_DHAKA = 70;
+export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 130;
+export const DELIVERY_CHARGE_MULTIBUY = 50;
 
 export const DISTRICTS = [
   "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogura",
@@ -31,10 +32,15 @@ export const CONTACT_INFO = {
   email: "rookiesdnmco@gmail.com",
 };
 
-export function getDeliveryCharge(district: string, itemCount = 0): number {
+export function getRegularDeliveryCharge(district: string): number {
   return district.trim().toLowerCase() === "dhaka"
     ? DELIVERY_CHARGE_DHAKA
     : DELIVERY_CHARGE_OUTSIDE_DHAKA;
+}
+
+export function getDeliveryCharge(district: string, itemCount = 0): number {
+  if (itemCount >= 2) return DELIVERY_CHARGE_MULTIBUY;
+  return getRegularDeliveryCharge(district);
 }
 
 export const SIZE_CHART = [

@@ -13,6 +13,7 @@ export function Footer() {
               width={164}
               height={48}
               className="h-12 w-auto object-contain"
+              style={{ width: "auto" }}
             />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
               {SITE_CONFIG.description}

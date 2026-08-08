@@ -17,20 +17,17 @@ import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-<<<<<<< HEAD
-=======
-  hasMultiBuyDiscount,
-  PROMO_DELIVERY_CHARGE,
   ORIGINAL_PRICE,
->>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
+import { Size } from "@/types";
 
 export default function CartDrawer() {
   const isOpen = useCart((s) => s.isOpen);
   const closeCart = useCart((s) => s.closeCart);
   const items = useCart((s) => s.items);
   const updateQuantity = useCart((s) => s.updateQuantity);
+  const updateSize = useCart((s) => s.updateSize);
   const removeItem = useCart((s) => s.removeItem);
   const subtotal = useCart((s) => s.subtotal());
   const cartQuantity = getCartQuantity(items);
@@ -82,9 +79,19 @@ export default function CartDrawer() {
                           <p className="text-sm font-medium leading-tight text-black">
                             {item.productName}
                           </p>
-                          <p className="text-xs text-muted-foreground">
-                            {item.productCode} &middot; Size {item.size}
-                          </p>
+                          <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                            {item.productCode} &middot; Size: 
+                            <select
+                              value={item.size}
+                              onChange={(e) => updateSize(item.productCode, item.size, e.target.value as Size)}
+                              className="rounded border border-black/10 bg-transparent px-0.5 py-0.5 text-xs outline-none"
+                            >
+                              <option value="M">M</option>
+                              <option value="L">L</option>
+                              <option value="XL">XL</option>
+                              <option value="XXL">XXL</option>
+                            </select>
+                          </div>
                         </div>
                         <button
                           type="button"

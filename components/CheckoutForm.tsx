@@ -31,7 +31,6 @@ const checkoutSchema = z.object({
   address: z.string().min(1, "Address is required"),
   district: z.string().min(1, "District is required"),
   area: z.string().min(1, "Area / Thana is required"),
-  size: z.string().min(1, "Size is required"),
   note: z.string().optional(),
 });
 
@@ -65,7 +64,6 @@ export default function CheckoutForm({
       address: "",
       district: "",
       area: "",
-      size: "",
       note: "",
     },
   });
@@ -91,7 +89,7 @@ export default function CheckoutForm({
       items: items.map((i) => ({
         productCode: i.productCode,
         productName: i.productName,
-        size: (values.size || i.size) as any, // Override cart size with form selected size
+        size: i.size,
         quantity: i.quantity,
         price: unitPrice,
       })),
@@ -231,26 +229,7 @@ export default function CheckoutForm({
         </div>
       </div>
       
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="size">Shirt Size *</Label>
-        <Controller
-          name="size"
-          control={control}
-          render={({ field }) => (
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger id="size" aria-invalid={!!errors.size} className="h-10 w-full">
-                <SelectValue placeholder="Select Size" />
-              </SelectTrigger>
-              <SelectContent>
-                {["S", "M", "L", "XL", "XXL"].map((s) => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-        {errors.size && <p className="text-xs text-destructive">{errors.size.message}</p>}
-      </div>
+
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="note">Note (optional)</Label>

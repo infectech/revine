@@ -103,7 +103,7 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
         <Button
           type="button"
           onClick={() => onSelect(product)}
-          className="h-8 rounded-full bg-[#E53935]/10 text-xs font-semibold text-[#E53935] transition-all hover:bg-[#E53935] hover:text-white sm:mt-1 sm:h-9"
+          className="h-8 rounded-full bg-gold text-xs font-semibold text-black transition-all hover:bg-gold/80 sm:mt-1 sm:h-9"
         >
           View Details
         </Button>

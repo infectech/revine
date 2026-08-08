@@ -4,18 +4,14 @@ import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Separator } from "@/components/ui/separator";
-import { getDeliveryCharge } from "@/lib/config";
+import { getDeliveryCharge, getRegularDeliveryCharge } from "@/lib/config";
+import { Size } from "@/types";
 import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-<<<<<<< HEAD
   ORIGINAL_PRICE,
   SALE_PRICE,
-=======
-  hasMultiBuyDiscount,
-  ORIGINAL_PRICE,
->>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -27,11 +23,14 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
   const updateQuantity = useCart((s) => s.updateQuantity);
+  const updateSize = useCart((s) => s.updateSize);
   const removeItem = useCart((s) => s.removeItem);
   const itemCount = getCartQuantity(items);
   const unitPrice = getCartUnitPrice(items);
   const deliveryCharge =
     district ? getDeliveryCharge(district, itemCount) : null;
+  const regularDeliveryCharge =
+    district ? getRegularDeliveryCharge(district) : null;
   const total = subtotal + (deliveryCharge ?? 0);
 
   return (
@@ -55,9 +54,19 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
               <p className="text-sm font-medium leading-tight text-black">
                 {item.productName}
               </p>
-              <p className="text-xs text-muted-foreground">
-                Size: {item.size}
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">Size:</span>
+                <select
+                  value={item.size}
+                  onChange={(e) => updateSize(item.productCode, item.size, e.target.value as Size)}
+                  className="rounded-md border border-black/10 bg-transparent px-1 py-0.5 text-xs outline-none"
+                >
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
               <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
@@ -121,7 +130,10 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
           <span className="text-muted-foreground">Delivery</span>
           <span>
             {deliveryCharge !== null ? (
-              formatCurrency(deliveryCharge)
+              <span className="flex items-center gap-2">
+                 {itemCount >= 2 && <span className="text-xs line-through text-muted-foreground">{formatCurrency(regularDeliveryCharge ?? 0)}</span>}
+                 {formatCurrency(deliveryCharge)}
+              </span>
             ) : (
               <span className="text-xs text-muted-foreground">
                 Select district

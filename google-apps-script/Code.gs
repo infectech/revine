@@ -44,16 +44,16 @@ function doPost(e) {
     sheet.appendRow([
       orderId,
       date,
+      payload.customer.phone,
       codesAndSizes,
+      payload.total,
       productNames,
       totalQuantity,
       payload.customer.name,
-      payload.customer.phone,
       payload.customer.address,
       payload.customer.district,
       payload.customer.area,
       payload.deliveryCharge,
-      payload.total,
       "Pending",
     ]);
 
@@ -74,16 +74,16 @@ function getSheet() {
     sheet.appendRow([
       "Order ID",
       "Date",
+      "Phone",
       "Product Codes + Sizes",
+      "Total Bill",
       "Product Names",
       "Quantity",
       "Customer Name",
-      "Phone",
       "Address",
       "District",
       "Area",
       "Delivery Charge",
-      "Total Bill",
       "Status",
     ]);
   }

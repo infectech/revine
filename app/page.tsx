@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
 import { products } from "@/data/products";
@@ -26,64 +28,15 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex h-[45vh] min-h-[320px] items-center justify-center overflow-hidden bg-black sm:h-[70vh]">
+      <section className="relative h-[100dvh] overflow-hidden bg-black sm:h-[85vh]">
         <Image
-<<<<<<< HEAD
-          src="/products/rookies 05-08-26 RR 01.png"
-          alt="Rookies DNMCO premium shirt"
-=======
           src="/hero.png"
-          alt="Rookies DNMCO premium T-shirt"
->>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
+          alt="Rookies DNMCO premium shirt"
           fill
           priority
           sizes="100vw"
           className="object-cover object-center"
         />
-<<<<<<< HEAD
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/35 to-black/80" />
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative text-xs font-semibold uppercase tracking-[0.3em] text-gold"
-        >
-          Designed in Bangladesh
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading relative mt-4 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl"
-        >
-          Rookies DNMCO Premium Shirts
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
-        >
-          Export quality cotton, durable stitching, and premium comfort. 
-          Cash on delivery, nationwide.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="relative mt-8"
-        >
-          <a href="#products">
-            <Button
-              size="lg"
-              className="h-12 rounded-full bg-gold px-8 text-black hover:bg-gold/90"
-            >
-              Shop the Collection
-            </Button>
-          </a>
-        </motion.div>
-=======
->>>>>>> d103c38fa335c1668897a3fba9926b3ff4d1b70d
       </section>
 
       <section id="products" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
