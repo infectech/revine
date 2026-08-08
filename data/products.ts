@@ -7,25 +7,25 @@ const productPhotoNumbers = [
 ];
 
 const productNames: Record<number, string> = {
-  1: "Core Black Tee",
-  4: "Urban Street Tee",
-  7: "Retro Wave Tee",
-  10: "Neon Nights Tee",
-  13: "Vintage Soul Tee",
-  16: "Bold Statement Tee",
-  19: "Clean White Tee",
-  22: "Street Canvas Tee",
-  25: "Everyday Casual Tee",
-  31: "Limited Drop Tee",
-  34: "Signature Tee",
-  37: "Premium Essential Tee",
+  1: "Urban Check",
+  4: "Midnight Plaid",
+  7: "Classic Grid",
+  10: "Shadow Check",
+  13: "Royal Plaid",
+  16: "Streetline Check",
+  19: "Vintage Grid",
+  22: "Bold Check",
+  25: "Urban Plaid",
+  31: "Heritage Check",
+  34: "Monarch Grid",
+  37: "Rugged Check",
 };
 
 export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
   (acc, photoNumber, index) => {
     const groupIndex = Math.floor(index / 3);
     if (index % 3 === 0) {
-      const code = `RR${String(photoNumber).padStart(2, "0")}`;
+      const code = `RR${String(groupIndex + 1).padStart(2, "0")}`;
       acc.push({
         id: groupIndex + 1,
         code,
