@@ -82,13 +82,17 @@ export default function FAQPage() {
           <h3 className="font-heading text-lg font-semibold text-black">
             Delivery Time
           </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            - Inside Dhaka: 1–2 working days
-          </p>
-          <p className="mb-4">
-            - Outside Dhaka: 2–3 working days
-          </p>
-          <p className="mb-4 text-sm text-muted-foreground">
+          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span>🚚</span>
+              <span>Inside Dhaka: 1–2 working days</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span>🚚</span>
+              <span>Outside Dhaka: 2–3 working days</span>
+            </li>
+          </ul>
+          <p className="mt-4 text-sm text-muted-foreground">
             Delivery may occasionally be delayed due to unforeseen
             circumstances or courier-related issues.
           </p>
