@@ -170,7 +170,7 @@ export default function CheckoutForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="address">Address *</Label>
-        <TextArea
+        <Textarea
           id="address"
           placeholder="House, road, area details"
           aria-invalid={!!errors.address}

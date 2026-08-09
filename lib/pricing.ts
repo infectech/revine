@@ -1,15 +1,8 @@
 import { CartItem } from "@/types";
 
 export const ORIGINAL_PRICE = 1200;
-<<<<<<< HEAD
-export const SALE_PRICE = 600;
-export const MULTI_BUY_PRICE = 600;
-export const MULTI_BUY_MIN_QUANTITY = 2;
-export const PROMO_DELIVERY_CHARGE = 50;
-=======
 export const SALE_PRICE = 700;
 export const MULTIBUY_PRICE = 600;
->>>>>>> 0b065f61d39f4f7c4e765013c355eeaa15dd386a
 
 export function getDiscountPercent(
   originalPrice = ORIGINAL_PRICE,
@@ -51,14 +44,8 @@ export function getDeliveryChargeForItems(
   district: string,
   items: Pick<CartItem, "quantity">[]
 ) {
-<<<<<<< HEAD
-  if (hasMultiBuyDiscount(items)) return PROMO_DELIVERY_CHARGE;
-
-  return district.trim().toLowerCase() === "dhaka" ? 80 : 130;
-=======
   if (hasMultiBuyDiscount(items)) {
     return 50;
   }
   return getRegularDeliveryCharge(district);
->>>>>>> 0b065f61d39f4f7c4e765013c355eeaa15dd386a
 }

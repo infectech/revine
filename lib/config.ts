@@ -9,14 +9,9 @@ export const SITE_CONFIG = {
   whatsapp: "01400550357",
 };
 
-<<<<<<< HEAD
-export const DELIVERY_CHARGE_DHAKA = 80;
-export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 130;
-=======
 export const DELIVERY_CHARGE_DHAKA = 70;
 export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 130;
 export const DELIVERY_CHARGE_MULTIBUY = 50;
->>>>>>> 0b065f61d39f4f7c4e765013c355eeaa15dd386a
 
 export const DISTRICTS = [
   "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogura",

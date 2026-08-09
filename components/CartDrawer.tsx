@@ -166,15 +166,7 @@ export default function CartDrawer() {
                   </div>
                 )}
                 <p className="text-xs text-muted-foreground">
-<<<<<<< HEAD
-                  {promoDeliveryApplies
-                    ? `Promo delivery: ${formatCurrency(
-                        PROMO_DELIVERY_CHARGE
-                      )} for 2 or more shirts.`
-                    : "Delivery charge is calculated at checkout based on your district."}
-=======
                   Delivery charge is calculated at checkout based on your district.
->>>>>>> 0b065f61d39f4f7c4e765013c355eeaa15dd386a
                 </p>
               </div>
               <Separator className="mt-1" />
