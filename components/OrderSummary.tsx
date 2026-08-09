@@ -126,6 +126,12 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
             )}
           </span>
         </div>
+        <div className="mt-2 rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground">
+          <p className="font-semibold text-black">Delivery Time</p>
+          <p>Inside Dhaka: 1–2 working days</p>
+          <p>Outside Dhaka: 2–3 working days</p>
+          <p className="mt-1">Delivery may occasionally be delayed due to unforeseen circumstances or courier-related issues.</p>
+        </div>
         <Separator className="my-1" />
         <div className="flex justify-between text-base font-semibold text-black">
           <span>Total</span>

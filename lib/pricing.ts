@@ -1,7 +1,7 @@
 import { CartItem } from "@/types";
 
 export const ORIGINAL_PRICE = 1200;
-export const SALE_PRICE = 700;
+export const SALE_PRICE = 600;
 export const MULTI_BUY_PRICE = 600;
 export const MULTI_BUY_MIN_QUANTITY = 2;
 export const PROMO_DELIVERY_CHARGE = 50;
@@ -47,5 +47,5 @@ export function getDeliveryChargeForItems(
 ) {
   if (hasMultiBuyDiscount(items)) return PROMO_DELIVERY_CHARGE;
 
-  return district.trim().toLowerCase() === "dhaka" ? 70 : 120;
+  return district.trim().toLowerCase() === "dhaka" ? 80 : 130;
 }

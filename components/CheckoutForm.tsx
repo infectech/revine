@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, PackageCheck, PhoneCall } from "lucide-react";
+import { Loader2, PackageCheck, PhoneCall, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,7 @@ import { DISTRICTS, getDeliveryCharge } from "@/lib/config";
 import { getCartQuantity, getCartUnitPrice } from "@/lib/pricing";
 import { trackPurchase } from "@/lib/pixel";
 import { OrderPayload, OrderResponse } from "@/types";
+import Link from "next/link";
 
 const checkoutSchema = z.object({
   name: z.string().min(1, "Full name is required"),
@@ -67,6 +68,8 @@ export default function CheckoutForm({
       note: "",
     },
   });
+
+  const [isChecked, setIsChecked] = useState(false);
 
   const onSubmit = async (values: CheckoutFormValues) => {
     if (items.length === 0) return;
@@ -238,47 +241,69 @@ export default function CheckoutForm({
         />
       </div>
 
-      <section className="rounded-2xl border border-[#E53935]/15 bg-[#E53935]/5 p-4">
-        <div className="flex items-start gap-2">
-          <PackageCheck className="mt-0.5 size-4 shrink-0 text-[#E53935]" />
-          <div>
-            <h3 className="text-sm font-semibold text-black">
-              Rookies DNMCO - Return & Exchange Policy
-            </h3>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-muted-foreground">
-              <li>10 Days Easy Exchange.</li>
-              <li>
-                Check your parcel in front of the delivery person before
-                accepting.
-              </li>
-              <li>No return after the delivery person leaves.</li>
-              <li>
-                Exchange only for size issues, wrong product, or manufacturing
-                defects.
-              </li>
-              <li>
-                Courier charges for exchanges may apply unless the error is from
-                Rookies DNMCO.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
+<section className="rounded-2xl border border-[#E53935]/15 bg-[#E53935]/5 p-4">
+         <div className="flex items-start gap-2">
+           <PackageCheck className="mt-0.5 size-4 shrink-0 text-[#E53935]" />
+           <div>
+             <h3 className="text-sm font-semibold text-black">
+               Rookies DNMCO - Return & Exchange Policy
+             </h3>
+             <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-muted-foreground">
+               <li>10 Days Easy Exchange.</li>
+               <li>
+                 Check your parcel in front of the delivery person before
+                 accepting.
+               </li>
+               <li>No return after the delivery person leaves.</li>
+               <li>
+                 Exchange only for size issues, wrong product, or manufacturing
+                 defects.
+               </li>
+               <li>
+                 Courier charges for exchanges may apply unless the error is from
+                 Rookies DNMCO.
+               </li>
+             </ul>
+           </div>
+         </div>
+       </section>
 
-      <Button
-        type="submit"
-        disabled={submitting || items.length === 0}
-        className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black"
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="size-4 animate-spin" />
-            Placing Order...
-          </>
-        ) : (
-          "Place Order (Cash on Delivery)"
-        )}
-      </Button>
+       <section className="flex items-start gap-2 rounded-2xl border border-[#5B83E5]/15 bg-[#5B83E5]/5 p-4">
+         <Link href="/faq" className="text-primary-600 underline">
+           <span className="size-4 text-[#5B83E5]">
+             <PdfFileIcon className="text-primary-600" aria-hidden="true" />
+           </span>
+         </Link>
+         <h3 className="text-sm font-semibold ml-4 text-black">I agree to the terms and condition</h3>
+         <Input
+           id="termsAgree"
+           type="checkbox"
+           value="agreeTerms"
+           checked={isChecked}
+           onChange={(e) => setIsChecked(e.target.checked)}
+           disabled={submitting}
+           className="text-primary-600 text-md"
+         />
+         <p className="ml-4 text-xs text-muted-foreground">
+           By placing your order, you agree to the <Link href="/faq">FAQ</Link> and <Link href="/terms">Terms & Conditions</Link>
+           including delivery times.
+         </p>
+       </section>
+
+       <Button
+         type="submit"
+         disabled={submitting || items.length === 0 || !isChecked}
+         className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black"
+       >
+         {submitting ? (
+           <>
+             <Loader2 className="size-4 animate-spin" />
+             Placing Order...
+           </>
+         ) : (
+           "Place Order (Cash on Delivery)"
+         )}
+       </Button>
     </form>
   );
 }

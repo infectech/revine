@@ -4,10 +4,13 @@ export const SITE_CONFIG = {
     "Export quality premium T-shirts, designed in Bangladesh. Cash on delivery available nationwide.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rookies-dnmco.example.com",
   address: "Dhaka, Mirpur-13, Jabbar Morr",
+  phones: ["01777548390", "01400550357"],
+  email: "rookiesdnmco@gmail.com",
+  whatsapp: "01400550357",
 };
 
-export const DELIVERY_CHARGE_DHAKA = 70;
-export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 120;
+export const DELIVERY_CHARGE_DHAKA = 80;
+export const DELIVERY_CHARGE_OUTSIDE_DHAKA = 130;
 
 export const DISTRICTS = [
   "Dhaka",

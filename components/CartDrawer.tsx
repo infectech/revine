@@ -158,7 +158,7 @@ export default function CartDrawer() {
                 )}
                 <p className="text-xs text-muted-foreground">
                   {promoDeliveryApplies
-                    ? `Delivery promo applied: ${formatCurrency(
+                    ? `Promo delivery: ${formatCurrency(
                         PROMO_DELIVERY_CHARGE
                       )} for 2 or more shirts.`
                     : "Delivery charge is calculated at checkout based on your district."}
