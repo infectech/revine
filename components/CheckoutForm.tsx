@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, PackageCheck, PhoneCall } from "lucide-react";
+import { Loader2, PhoneCall } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -239,33 +239,6 @@ export default function CheckoutForm({
           {...register("note")}
         />
       </div>
-
-      <section className="rounded-2xl border border-[#E53935]/15 bg-[#E53935]/5 p-4">
-        <div className="flex items-start gap-2">
-          <PackageCheck className="mt-0.5 size-4 shrink-0 text-[#E53935]" />
-          <div>
-            <h3 className="text-sm font-semibold text-black">
-              Rookies DNMCO - Return & Exchange Policy
-            </h3>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-muted-foreground">
-              <li>10 Days Easy Exchange.</li>
-              <li>
-                Check your parcel in front of the delivery person before
-                accepting.
-              </li>
-              <li>No return after the delivery person leaves.</li>
-              <li>
-                Exchange only for size issues, wrong product, or manufacturing
-                defects.
-              </li>
-              <li>
-                Courier charges for exchanges may apply unless the error is from
-                Rookies DNMCO.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
 
       <Button
         type="submit"

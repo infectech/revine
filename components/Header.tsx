@@ -20,9 +20,6 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-white/85 backdrop-blur-md">
-      <div className="bg-[#E53935] px-3 py-2 text-center text-xs font-bold leading-snug text-white sm:text-sm">
-        🎉 Premium Quality Shirts | Cash on Delivery Nationwide
-      </div>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center" aria-label={`${SITE_CONFIG.name} home`}>
           <Image
@@ -43,7 +40,7 @@ export function Header() {
           <a href="#about" className="transition-colors hover:text-black">
             About
           </a>
-          <a href="#faq" className="transition-colors hover:text-black">
+          <a href="/faq" className="transition-colors hover:text-black">
             FAQ
           </a>
         </nav>

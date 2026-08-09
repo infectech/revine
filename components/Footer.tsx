@@ -30,7 +30,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div id="faq">
+          <div id="contact">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-gold">
               Contact
             </h4>

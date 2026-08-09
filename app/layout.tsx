@@ -104,7 +104,7 @@ export default function RootLayout({
         )}
         <PixelInit />
         <div className="w-full overflow-hidden bg-black py-2 text-center text-xs font-semibold uppercase tracking-widest text-gold sm:text-sm">
-          <span className="inline-block animate-[marquee_18s_linear_infinite] whitespace-nowrap sm:animate-none">
+          <span className="inline-block animate-[marquee_18s_linear_infinite] whitespace-nowrap">
             🎉 Buy 2 or more shirts and get 50% discount + 50tk Delivery Charge!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🎉 Buy 2 or more shirts and get 50% discount + 50tk Delivery Charge!
           </span>
         </div>
