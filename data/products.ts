@@ -1,6 +1,28 @@
 import { Product } from "@/types";
 import { SALE_PRICE } from "@/lib/pricing";
 
+const PRODUCT_DESCRIPTION = `### Shirt Details
+- Export Quality Premium Shirt
+- 100% Cotton Fabric
+- Fabric Weight: 210-230 GSM
+- Soft & Comfortable
+- Durable Stitching
+
+### Features
+- Premium Quality
+- Perfect fit for everyday wear
+
+### Wash Care
+- Machine or hand wash with cold/normal water.
+- Use mild detergent.
+- Do not bleach.
+- Avoid direct sunlight while drying.
+
+### Delivery Information
+- Inside Dhaka: 1–2 working days
+- Outside Dhaka: 2–3 working days
+*Note: Delivery may occasionally be delayed due to unforeseen circumstances or courier-related issues.*`;
+
 const productPhotoNumbers = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23, 24, 25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39,
@@ -29,8 +51,8 @@ export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
       acc.push({
         id: groupIndex + 1,
         code,
-        name: productNames[photoNumber] ?? `Rookies DNMCO Tee ${String(photoNumber).padStart(2, "0")}`,
-        description: `Fabric: 100% Cotton\nGSM: 210–230 GSM\nQuality: Export Quality\nComfort: All-Season Friendly\nFeel: Soft, Comfortable & Breathable\nSuitable For: Everyday & Casual Wear\n\nWash Care:\nMachine or hand wash with cold/normal water.\nUse mild detergent.\nDo not bleach.\nWash inside out.\nAvoid direct sunlight while drying.\nIron on medium heat.\nDo not tumble dry.`,
+        name: productNames[photoNumber] ?? `Rookies DNMCO Premium Shirt ${String(photoNumber).padStart(2, "0")}`,
+        description: PRODUCT_DESCRIPTION,
         price: SALE_PRICE,
         images: [
           `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,

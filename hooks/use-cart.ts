@@ -11,6 +11,7 @@ interface CartState {
   addItem: (item: CartItem) => void;
   removeItem: (productCode: string, size: Size) => void;
   updateQuantity: (productCode: string, size: Size, quantity: number) => void;
+  updateSize: (productCode: string, oldSize: Size, newSize: Size) => void;
   clearCart: () => void;
   subtotal: () => number;
   itemCount: () => number;
@@ -59,6 +60,37 @@ export const useCart = create<CartState>()(
                     : i
                 ),
         })),
+      updateSize: (productCode, oldSize, newSize) =>
+        set((state) => {
+          if (oldSize === newSize) return state;
+          
+          const existingNewSizeItem = state.items.find(
+            (i) => i.productCode === productCode && i.size === newSize
+          );
+
+          if (existingNewSizeItem) {
+            // merge quantities if new size already exists
+            const oldItem = state.items.find((i) => i.productCode === productCode && i.size === oldSize);
+            return {
+              items: state.items
+                .map((i) =>
+                  i.productCode === productCode && i.size === newSize
+                    ? { ...i, quantity: i.quantity + (oldItem?.quantity || 0) }
+                    : i
+                )
+                .filter((i) => !(i.productCode === productCode && i.size === oldSize))
+            };
+          }
+
+          // just update the size
+          return {
+            items: state.items.map((i) =>
+              i.productCode === productCode && i.size === oldSize
+                ? { ...i, size: newSize }
+                : i
+            ),
+          };
+        }),
       clearCart: () => set({ items: [] }),
       subtotal: () => getCartSubtotal(get().items),
       itemCount: () =>

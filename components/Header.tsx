@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
@@ -8,14 +9,17 @@ import { useCart } from "@/hooks/use-cart";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function Header() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const itemCount = useCart((s) => s.itemCount());
   const openCart = useCart((s) => s.openCart);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-white/85 backdrop-blur-md">
-      <div className="bg-[#E53935] px-3 py-2 text-center text-xs font-bold leading-snug text-white sm:text-sm">
-        🎉 ২ টি শার্ট নিলে মাত্র ৫০ টাকা ডেলিভারি চার্জ + ১৫% ডিসকাউন্ট!
-      </div>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center" aria-label={`${SITE_CONFIG.name} home`}>
           <Image
@@ -25,6 +29,7 @@ export function Header() {
             height={40}
             priority
             className="h-10 w-auto object-contain"
+            style={{ width: "auto" }}
           />
         </Link>
 
@@ -35,7 +40,7 @@ export function Header() {
           <a href="#about" className="transition-colors hover:text-black">
             About
           </a>
-          <a href="#faq" className="transition-colors hover:text-black">
+          <a href="/faq" className="transition-colors hover:text-black">
             FAQ
           </a>
         </nav>
@@ -48,7 +53,7 @@ export function Header() {
           className="relative h-10 w-10 rounded-full hover:bg-black/5"
         >
           <ShoppingBag className="size-5 text-black" />
-          {itemCount > 0 && (
+          {isMounted && itemCount > 0 && (
             <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[11px] font-semibold text-black">
               {itemCount}
             </span>

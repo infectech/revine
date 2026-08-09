@@ -17,22 +17,21 @@ import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-  hasMultiBuyDiscount,
-  PROMO_DELIVERY_CHARGE,
   ORIGINAL_PRICE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
+import { Size } from "@/types";
 
 export default function CartDrawer() {
   const isOpen = useCart((s) => s.isOpen);
   const closeCart = useCart((s) => s.closeCart);
   const items = useCart((s) => s.items);
   const updateQuantity = useCart((s) => s.updateQuantity);
+  const updateSize = useCart((s) => s.updateSize);
   const removeItem = useCart((s) => s.removeItem);
   const subtotal = useCart((s) => s.subtotal());
   const cartQuantity = getCartQuantity(items);
   const unitPrice = getCartUnitPrice(items);
-  const promoDeliveryApplies = hasMultiBuyDiscount(items);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && closeCart()}>
@@ -80,9 +79,19 @@ export default function CartDrawer() {
                           <p className="text-sm font-medium leading-tight text-black">
                             {item.productName}
                           </p>
-                          <p className="text-xs text-muted-foreground">
-                            {item.productCode} &middot; Size {item.size}
-                          </p>
+                          <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                            {item.productCode} &middot; Size: 
+                            <select
+                              value={item.size}
+                              onChange={(e) => updateSize(item.productCode, item.size, e.target.value as Size)}
+                              className="rounded border border-black/10 bg-transparent px-0.5 py-0.5 text-xs outline-none"
+                            >
+                              <option value="M">M</option>
+                              <option value="L">L</option>
+                              <option value="XL">XL</option>
+                              <option value="XXL">XXL</option>
+                            </select>
+                          </div>
                         </div>
                         <button
                           type="button"
@@ -142,7 +151,7 @@ export default function CartDrawer() {
               <div className="flex flex-col gap-1.5 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {cartQuantity >= 2 ? "Promo unit price" : "Unit price"}
+                    Unit price
                   </span>
                   <span>{formatCurrency(unitPrice)}</span>
                 </div>
@@ -157,11 +166,15 @@ export default function CartDrawer() {
                   </div>
                 )}
                 <p className="text-xs text-muted-foreground">
+<<<<<<< HEAD
                   {promoDeliveryApplies
                     ? `Promo delivery: ${formatCurrency(
                         PROMO_DELIVERY_CHARGE
                       )} for 2 or more shirts.`
                     : "Delivery charge is calculated at checkout based on your district."}
+=======
+                  Delivery charge is calculated at checkout based on your district.
+>>>>>>> 0b065f61d39f4f7c4e765013c355eeaa15dd386a
                 </p>
               </div>
               <Separator className="mt-1" />

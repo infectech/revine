@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
 import { products } from "@/data/products";
@@ -26,24 +28,25 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex h-[45vh] min-h-[320px] items-center justify-center overflow-hidden bg-black sm:h-[70vh]">
+      <section className="w-full">
         <Image
           src="/hero.png"
-          alt="Rookies DNMCO premium T-shirt"
-          fill
-          priority
+          alt="Rookies DNMCO premium shirt"
+          width={0}
+          height={0}
           sizes="100vw"
-          className="object-cover object-center"
+          priority
+          className="h-auto w-full"
         />
       </section>
 
       <section id="products" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="font-heading text-3xl font-semibold text-black">
-            Shop All T-Shirts
+            Shop All Shirts
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Buy 2 or more for ৳600 per shirt plus ৳50 delivery.
+            Premium quality shirts with cash on delivery available anywhere in Bangladesh.
           </p>
         </div>
 

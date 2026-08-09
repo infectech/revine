@@ -4,13 +4,14 @@ import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Separator } from "@/components/ui/separator";
-import { getDeliveryCharge } from "@/lib/config";
+import { getDeliveryCharge, getRegularDeliveryCharge } from "@/lib/config";
+import { Size } from "@/types";
 import {
   getCartQuantity,
   getCartUnitPrice,
   getLineTotal,
-  hasMultiBuyDiscount,
   ORIGINAL_PRICE,
+  SALE_PRICE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
 
@@ -22,13 +23,14 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
   const updateQuantity = useCart((s) => s.updateQuantity);
+  const updateSize = useCart((s) => s.updateSize);
   const removeItem = useCart((s) => s.removeItem);
   const itemCount = getCartQuantity(items);
   const unitPrice = getCartUnitPrice(items);
   const deliveryCharge =
-    district || hasMultiBuyDiscount(items)
-      ? getDeliveryCharge(district || "Dhaka", itemCount)
-      : null;
+    district ? getDeliveryCharge(district, itemCount) : null;
+  const regularDeliveryCharge =
+    district ? getRegularDeliveryCharge(district) : null;
   const total = subtotal + (deliveryCharge ?? 0);
 
   return (
@@ -52,9 +54,19 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
               <p className="text-sm font-medium leading-tight text-black">
                 {item.productName}
               </p>
-              <p className="text-xs text-muted-foreground">
-                Size: {item.size}
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">Size:</span>
+                <select
+                  value={item.size}
+                  onChange={(e) => updateSize(item.productCode, item.size, e.target.value as Size)}
+                  className="rounded-md border border-black/10 bg-transparent px-1 py-0.5 text-xs outline-none"
+                >
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
               <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
@@ -101,12 +113,12 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
       <Separator className="my-4" />
       <div className="flex flex-col gap-1.5 text-sm">
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Unit price</span>
-          <span>{formatCurrency(unitPrice)}</span>
+          <span className="text-muted-foreground">Regular Price</span>
+          <span className="line-through">{formatCurrency(ORIGINAL_PRICE * Math.max(1, itemCount))}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Subtotal</span>
-          <span>{formatCurrency(subtotal)}</span>
+        <div className="flex justify-between font-medium text-[#E53935]">
+          <span>Offer Price</span>
+          <span>{formatCurrency(subtotal || SALE_PRICE)}</span>
         </div>
         {unitPrice < ORIGINAL_PRICE && (
           <div className="flex justify-between text-sm font-medium text-[#E53935]">
@@ -118,7 +130,10 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
           <span className="text-muted-foreground">Delivery</span>
           <span>
             {deliveryCharge !== null ? (
-              formatCurrency(deliveryCharge)
+              <span className="flex items-center gap-2">
+                 {itemCount >= 2 && <span className="text-xs line-through text-muted-foreground">{formatCurrency(regularDeliveryCharge ?? 0)}</span>}
+                 {formatCurrency(deliveryCharge)}
+              </span>
             ) : (
               <span className="text-xs text-muted-foreground">
                 Select district
