@@ -7,18 +7,14 @@ export function OfferPopup() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem("offer-popup-seen");
-    if (!seen) {
-      setOpen(true);
-      sessionStorage.setItem("offer-popup-seen", "1");
-    }
+    setOpen(true);
   }, []);
 
   if (!open) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/70 p-4"
       onClick={() => setOpen(false)}
     >
       <div className="relative max-h-[90vh] max-w-sm">
