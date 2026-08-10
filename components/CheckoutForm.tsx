@@ -22,7 +22,6 @@ import { DISTRICTS, getDeliveryCharge } from "@/lib/config";
 import { getCartQuantity, getCartUnitPrice } from "@/lib/pricing";
 import { trackPurchase } from "@/lib/pixel";
 import { OrderPayload, OrderResponse } from "@/types";
-import Link from "next/link";
 
 const checkoutSchema = z.object({
   name: z.string().min(1, "Full name is required"),
@@ -69,7 +68,6 @@ export default function CheckoutForm({
     },
   });
 
-  const [isChecked, setIsChecked] = useState(false);
 
   const onSubmit = async (values: CheckoutFormValues) => {
     if (items.length === 0) return;
@@ -241,29 +239,10 @@ export default function CheckoutForm({
         />
       </div>
 
-      <section className="flex items-center gap-2 rounded-2xl border border-[#5B83E5]/15 bg-[#5B83E5]/5 p-4">
-        <Input
-          id="termsAgree"
-          type="checkbox"
-          checked={isChecked}
-          onChange={(e) => setIsChecked(e.target.checked)}
-          disabled={submitting}
-          className="size-4 w-auto shrink-0"
-        />
-        <label
-          htmlFor="termsAgree"
-          className="text-sm font-semibold text-black"
-        >
-          I agree to the{" "}
-          <Link href="/faq" className="text-primary-600 underline">
-            terms and conditions
-          </Link>
-        </label>
-      </section>
 
       <Button
         type="submit"
-        disabled={submitting || items.length === 0 || !isChecked}
+        disabled={submitting || items.length === 0}
         className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black"
       >
         {submitting ? (
