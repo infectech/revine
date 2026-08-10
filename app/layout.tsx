@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import PixelInit from "@/components/PixelInit";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { OfferPopup } from "@/components/OfferPopup";
 import { SITE_CONFIG, META_PIXEL_ID } from "@/lib/config";
 
 const manrope = Manrope({
@@ -114,6 +115,7 @@ export default function RootLayout({
         <Footer />
         <CartDrawer />
         <WhatsAppButton />
+        <OfferPopup />
         <Toaster position="top-center" richColors />
         <Analytics />
       </body>
