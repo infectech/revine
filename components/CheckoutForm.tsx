@@ -30,7 +30,6 @@ const checkoutSchema = z.object({
     .regex(/^01[3-9]\d{8}$/, "Enter a valid Bangladeshi phone number"),
   address: z.string().min(1, "Address is required"),
   district: z.string().min(1, "District is required"),
-  area: z.string().min(1, "Area / Thana is required"),
   note: z.string().optional(),
 });
 
@@ -63,7 +62,6 @@ export default function CheckoutForm({
       phone: "",
       address: "",
       district: "",
-      area: "",
       note: "",
     },
   });
@@ -83,9 +81,8 @@ export default function CheckoutForm({
         name: values.name,
         phone: values.phone,
         address: values.address,
-        district: values.district,
-        area: values.area,
-        note: values.note,
+          district: values.district,
+          note: values.note,
       },
       items: items.map((i) => ({
         productCode: i.productCode,
@@ -179,55 +176,41 @@ export default function CheckoutForm({
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="district">District *</Label>
-          <Controller
-            name="district"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={(value) => {
-                  field.onChange(value ?? "");
-                  onDistrictChange?.(value ?? "");
-                }}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="district">District *</Label>
+        <Controller
+          name="district"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value}
+              onValueChange={(value) => {
+                field.onChange(value ?? "");
+                onDistrictChange?.(value ?? "");
+              }}
+            >
+              <SelectTrigger
+                id="district"
+                aria-invalid={!!errors.district}
+                className="h-8 w-full"
               >
-                <SelectTrigger
-                  id="district"
-                  aria-invalid={!!errors.district}
-                  className="h-8 w-full"
-                >
-                  <SelectValue placeholder="Select district" />
-                </SelectTrigger>
-                <SelectContent>
-                  {DISTRICTS.map((district) => (
-                    <SelectItem key={district} value={district}>
-                      {district}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.district && (
-            <p className="text-xs text-destructive">
-              {errors.district.message}
-            </p>
+                <SelectValue placeholder="Select district" />
+              </SelectTrigger>
+              <SelectContent>
+                {DISTRICTS.map((district) => (
+                  <SelectItem key={district} value={district}>
+                    {district}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="area">Area / Thana *</Label>
-          <Input
-            id="area"
-            placeholder="e.g. Mirpur"
-            aria-invalid={!!errors.area}
-            {...register("area")}
-          />
-          {errors.area && (
-            <p className="text-xs text-destructive">{errors.area.message}</p>
-          )}
-        </div>
+        />
+        {errors.district && (
+          <p className="text-xs text-destructive">
+            {errors.district.message}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1.5">
