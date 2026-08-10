@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Fraunces, Manrope } from "next/font/google";
 import Script from "next/script";
 import { Toaster } from "sonner";
@@ -114,6 +115,7 @@ export default function RootLayout({
         <CartDrawer />
         <WhatsAppButton />
         <Toaster position="top-center" richColors />
+        <Analytics />
       </body>
     </html>
   );

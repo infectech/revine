@@ -57,7 +57,7 @@ function doPost(e) {
     sheet.appendRow([
       orderId,
       date,
-      payload.customer.phone,
+      Number(payload.customer.phone),
       codesAndSizes,
       payload.total,
       productNames,
@@ -69,6 +69,9 @@ function doPost(e) {
       payload.deliveryCharge,
       "Pending",
     ]);
+
+    // Keep the phone number a real Number cell but display the leading zero.
+    sheet.getRange(sheet.getLastRow(), 3).setNumberFormat("0000000000");
 
     return jsonResponse({ success: true, orderId: orderId });
   } catch (err) {
