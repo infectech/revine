@@ -34,7 +34,7 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
   const total = subtotal + (deliveryCharge ?? 0);
 
   return (
-    <div className="rounded-3xl border border-black/5 bg-white p-5 sm:p-6 lg:sticky lg:top-24">
+    <div className="rounded-2xl border border-black/10 bg-muted/20 p-5 sm:p-6">
       <h2 className="font-heading text-lg font-semibold text-black">
         Order Summary
       </h2>

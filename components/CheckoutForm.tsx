@@ -22,6 +22,7 @@ import { DISTRICTS, getDeliveryCharge } from "@/lib/config";
 import { getCartQuantity, getCartUnitPrice } from "@/lib/pricing";
 import { trackPurchase } from "@/lib/pixel";
 import { OrderPayload, OrderResponse } from "@/types";
+import OrderSummary from "@/components/OrderSummary";
 
 const checkoutSchema = z.object({
   name: z.string().min(1, "Full name is required"),
@@ -36,12 +37,10 @@ const checkoutSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 interface CheckoutFormProps {
-  onDistrictChange?: (district: string) => void;
-  onOrderPlaced?: (orderId: string) => void;
+  onOrderPlaced?: (orderId: string, total: number) => void;
 }
 
 export default function CheckoutForm({
-  onDistrictChange,
   onOrderPlaced,
 }: CheckoutFormProps) {
   const items = useCart((s) => s.items);
@@ -49,6 +48,7 @@ export default function CheckoutForm({
   const clearCart = useCart((s) => s.clearCart);
 
   const [submitting, setSubmitting] = useState(false);
+  const [district, setDistrict] = useState("");
 
   const {
     register,
@@ -81,8 +81,8 @@ export default function CheckoutForm({
         name: values.name,
         phone: values.phone,
         address: values.address,
-          district: values.district,
-          note: values.note,
+        district: values.district,
+        note: values.note,
       },
       items: items.map((i) => ({
         productCode: i.productCode,
@@ -105,7 +105,7 @@ export default function CheckoutForm({
 
       if (data.success && data.orderId) {
         trackPurchase(data.orderId, total);
-        onOrderPlaced?.(data.orderId);
+        onOrderPlaced?.(data.orderId, total);
         clearCart();
       } else {
         toast.error(
@@ -124,19 +124,19 @@ export default function CheckoutForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-5 rounded-3xl border border-black/5 bg-white p-5 sm:p-6"
+      className="grid grid-cols-1 gap-5 rounded-3xl border border-black/5 bg-white p-5 sm:p-6 lg:grid-cols-[1.2fr_1fr] lg:gap-x-8 lg:[grid-template-areas:'header_header''banner_banner''name_summary''phone_summary''address_summary''button_summary']"
       noValidate
     >
-      <h2 className="font-heading text-lg font-semibold text-black">
+      <h2 className="font-heading text-lg font-semibold text-black lg:[grid-area:header]">
         Delivery Details
       </h2>
 
-      <div className="flex items-start gap-2 rounded-2xl bg-muted px-4 py-3 text-sm text-muted-foreground">
+      <div className="flex items-start gap-2 rounded-2xl bg-muted px-4 py-3 text-sm text-muted-foreground lg:[grid-area:banner]">
         <PhoneCall className="mt-0.5 size-4 shrink-0 text-gold" />
         <p>Our representative will call you shortly to confirm your order.</p>
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 lg:[grid-area:name]">
         <Label htmlFor="name">Full Name *</Label>
         <Input
           id="name"
@@ -149,7 +149,7 @@ export default function CheckoutForm({
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 lg:[grid-area:phone]">
         <Label htmlFor="phone">Phone *</Label>
         <Input
           id="phone"
@@ -163,70 +163,75 @@ export default function CheckoutForm({
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="address">Address *</Label>
-        <Textarea
-          id="address"
-          placeholder="House, road, area details"
-          aria-invalid={!!errors.address}
-          {...register("address")}
-        />
-        {errors.address && (
-          <p className="text-xs text-destructive">{errors.address.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="district">District *</Label>
-        <Controller
-          name="district"
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(value) => {
-                field.onChange(value ?? "");
-                onDistrictChange?.(value ?? "");
-              }}
-            >
-              <SelectTrigger
-                id="district"
-                aria-invalid={!!errors.district}
-                className="h-8 w-full"
-              >
-                <SelectValue placeholder="Select district" />
-              </SelectTrigger>
-              <SelectContent>
-                {DISTRICTS.map((district) => (
-                  <SelectItem key={district} value={district}>
-                    {district}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      <div className="flex flex-col gap-4 rounded-2xl border border-black/10 p-4 lg:[grid-area:address]">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="address">Address *</Label>
+          <Textarea
+            id="address"
+            placeholder="House, road, area details"
+            aria-invalid={!!errors.address}
+            {...register("address")}
+          />
+          {errors.address && (
+            <p className="text-xs text-destructive">{errors.address.message}</p>
           )}
-        />
-        {errors.district && (
-          <p className="text-xs text-destructive">
-            {errors.district.message}
-          </p>
-        )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="district">District *</Label>
+          <Controller
+            name="district"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={(value) => {
+                  field.onChange(value ?? "");
+                  setDistrict(value ?? "");
+                }}
+              >
+                <SelectTrigger
+                  id="district"
+                  aria-invalid={!!errors.district}
+                  className="h-8 w-full"
+                >
+                  <SelectValue placeholder="Select district" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DISTRICTS.map((district) => (
+                    <SelectItem key={district} value={district}>
+                      {district}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.district && (
+            <p className="text-xs text-destructive">
+              {errors.district.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="note">Note (optional)</Label>
+          <Textarea
+            id="note"
+            placeholder="Anything we should know about your delivery?"
+            {...register("note")}
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="note">Note (optional)</Label>
-        <Textarea
-          id="note"
-          placeholder="Anything we should know about your delivery?"
-          {...register("note")}
-        />
+      <div className="lg:[grid-area:summary] lg:self-start lg:sticky lg:top-24">
+        <OrderSummary district={district} />
       </div>
-
 
       <Button
         type="submit"
         disabled={submitting || items.length === 0}
-        className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black"
+        className="mt-2 h-12 w-full rounded-full bg-black text-base text-white hover:bg-gold hover:text-black lg:[grid-area:button]"
       >
         {submitting ? (
           <>

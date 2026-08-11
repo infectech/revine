@@ -6,7 +6,6 @@ import { ChevronLeft } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { trackInitiateCheckout } from "@/lib/pixel";
 import CheckoutForm from "@/components/CheckoutForm";
-import OrderSummary from "@/components/OrderSummary";
 import OrderSuccess from "@/components/OrderSuccess";
 import { Button } from "@/components/ui/button";
 
@@ -14,8 +13,8 @@ export default function CheckoutPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart((s) => s.subtotal());
   const closeCart = useCart((s) => s.closeCart);
-  const [district, setDistrict] = useState("");
   const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
+  const [placedTotal, setPlacedTotal] = useState<number | null>(null);
 
   useEffect(() => {
     closeCart();
@@ -65,13 +64,14 @@ export default function CheckoutPage() {
       )}
 
       {placedOrderId ? (
-        <OrderSuccess orderId={placedOrderId} />
+        <OrderSuccess orderId={placedOrderId} total={placedTotal ?? 0} />
       ) : (
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-          <OrderSummary district={district} />
+        <div className="mt-8 mx-auto max-w-xl lg:max-w-none">
           <CheckoutForm
-            onDistrictChange={setDistrict}
-            onOrderPlaced={setPlacedOrderId}
+            onOrderPlaced={(orderId, total) => {
+              setPlacedOrderId(orderId);
+              setPlacedTotal(total);
+            }}
           />
         </div>
       )}

@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
+import { formatCurrency } from "@/lib/utils";
 
 interface OrderSuccessProps {
   orderId: string;
+  total: number;
 }
 
-export default function OrderSuccess({ orderId }: OrderSuccessProps) {
+export default function OrderSuccess({ orderId, total }: OrderSuccessProps) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.96 }}
@@ -30,9 +32,18 @@ export default function OrderSuccess({ orderId }: OrderSuccessProps) {
         Thank you for shopping with {SITE_CONFIG.name}. Our representative will
         call you shortly to confirm delivery.
       </p>
-      <p className="rounded-full bg-muted px-4 py-1.5 text-sm font-medium text-black">
-        Your Order ID: {orderId}
-      </p>
+      <div className="flex w-full flex-col gap-2 rounded-2xl bg-muted p-4">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">Order ID</span>
+          <span className="font-medium text-black">{orderId}</span>
+        </div>
+        <div className="flex items-center justify-between text-base">
+          <span className="font-semibold text-black">Total Bill</span>
+          <span className="font-semibold text-black">
+            {formatCurrency(total)}
+          </span>
+        </div>
+      </div>
     </motion.div>
   );
 }
