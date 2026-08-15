@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { Fraunces, Manrope } from "next/font/google";
+import { Manrope } from "next/font/google";
 import Script from "next/script";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -10,6 +10,7 @@ import CartDrawer from "@/components/CartDrawer";
 import PixelInit from "@/components/PixelInit";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { OfferPopup } from "@/components/OfferPopup";
+import Marquee from "@/components/Marquee";
 import { SITE_CONFIG, META_PIXEL_ID } from "@/lib/config";
 
 const manrope = Manrope({
@@ -17,16 +18,6 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
-  preload: true,
-});
-
-const fraunces = Fraunces({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -80,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${manrope.variable} h-full antialiased`}
     >
       <head>
         <link rel="icon" href="/logo golden.png" />
@@ -127,14 +118,9 @@ export default function RootLayout({
         )}
         <PixelInit />
         <div className="w-full overflow-hidden bg-black py-2 text-xs font-semibold uppercase tracking-widest text-gold sm:text-sm">
-          <div className="animate-marquee">
-            <span className="whitespace-nowrap">
-              🎉 Buy 2 or more shirts and get 50% discount + 50tk Delivery Charge!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-            <span className="whitespace-nowrap">
-              🎉 Buy 2 or more shirts and get 50% discount + 50tk Delivery Charge!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-          </div>
+          <Marquee speed={70}>
+            🎉 Buy 2 or more shirts and get 50% discount + 50tk Delivery Charge!
+          </Marquee>
         </div>
         <Header />
         <main className="flex flex-1 flex-col">{children}</main>
