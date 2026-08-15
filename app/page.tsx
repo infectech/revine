@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
 import { products } from "@/data/products";
 import { Product } from "@/types";
 import { useCart } from "@/hooks/use-cart";
 import { formatCurrency } from "@/lib/utils";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(
@@ -36,6 +35,8 @@ export default function Home() {
           height={0}
           sizes="100vw"
           priority
+          placeholder="blur"
+          blurDataURL={BLUR_PLACEHOLDER}
           className="h-auto w-full"
         />
       </section>

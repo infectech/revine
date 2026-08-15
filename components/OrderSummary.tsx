@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Separator } from "@/components/ui/separator";
 import { getDeliveryCharge, getRegularDeliveryCharge } from "@/lib/config";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 import { Size } from "@/types";
 import {
   getCartQuantity,
@@ -48,6 +49,9 @@ export default function OrderSummary({ district }: OrderSummaryProps) {
                 fill
                 sizes="64px"
                 className="object-cover"
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
             </div>
             <div className="flex flex-1 flex-col justify-center gap-0.5">

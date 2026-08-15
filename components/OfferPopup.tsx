@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 export function OfferPopup() {
   const [open, setOpen] = useState(false);
@@ -32,6 +33,8 @@ export function OfferPopup() {
           height={800}
           className="max-h-[90vh] w-full rounded-lg object-contain shadow-2xl"
           priority
+          placeholder="blur"
+          blurDataURL={BLUR_PLACEHOLDER}
         />
       </div>
     </div>

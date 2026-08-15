@@ -20,6 +20,7 @@ import {
   ORIGINAL_PRICE,
 } from "@/lib/pricing";
 import { formatCurrency } from "@/lib/utils";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 import { Size } from "@/types";
 
 export default function CartDrawer() {
@@ -71,6 +72,9 @@ export default function CartDrawer() {
                         fill
                         sizes="80px"
                         className="object-cover"
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL={BLUR_PLACEHOLDER}
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-1">

@@ -141,6 +141,9 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .content-auto {
+    content-visibility: auto;
+  }
 }
 
 @keyframes marquee {

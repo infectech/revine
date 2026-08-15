@@ -14,6 +14,7 @@ import { useCart } from "@/hooks/use-cart";
 import { trackAddToCart, trackViewContent } from "@/lib/pixel";
 import { SALE_PRICE } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 interface ProductModalProps {
   product: Product | null;
@@ -106,6 +107,9 @@ export default function ProductModal({
                       fill
                       sizes="64px"
                       className="object-cover"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL={BLUR_PLACEHOLDER}
                     />
                   </button>
                 ))}

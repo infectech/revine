@@ -7,6 +7,7 @@ import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { SITE_CONFIG } from "@/lib/config";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 export function Header() {
   const [isMounted, setIsMounted] = useState(false);
@@ -28,6 +29,8 @@ export function Header() {
             width={154}
             height={40}
             priority
+            placeholder="blur"
+            blurDataURL={BLUR_PLACEHOLDER}
             className="h-10 w-auto object-contain"
             style={{ width: "auto" }}
           />

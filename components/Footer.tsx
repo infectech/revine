@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE_CONFIG } from "@/lib/config";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 export function Footer() {
   return (
@@ -12,6 +13,9 @@ export function Footer() {
               alt={SITE_CONFIG.name}
               width={164}
               height={48}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
               className="h-12 w-auto object-contain"
               style={{ width: "auto" }}
             />

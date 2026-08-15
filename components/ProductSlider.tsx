@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BLUR_PLACEHOLDER } from "@/lib/image";
 
 export interface ProductSliderApi {
   scrollTo: (index: number) => void;
@@ -72,6 +73,9 @@ export default function ProductSlider({
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover"
                   priority={priority && i === 0}
+                  loading={priority && i === 0 ? undefined : "lazy"}
+                  placeholder="blur"
+                  blurDataURL={BLUR_PLACEHOLDER}
                 />
               </div>
             </div>
