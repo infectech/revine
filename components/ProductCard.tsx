@@ -20,11 +20,15 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) {
-  const [size, setSize] = useState<Size>("L");
-  const addItem = useCart((s) => s.addItem);
   const sizes: Size[] = ["M", "L", "XL", "XXL"];
+  const availableSizes = sizes.filter(
+    (s) => !product.outOfStockSizes?.includes(s)
+  );
+  const [size, setSize] = useState<Size>(() => availableSizes[0] ?? "M");
+  const addItem = useCart((s) => s.addItem);
 
   const handleAddToCart = () => {
+    if (!size || product.outOfStockSizes?.includes(size)) return;
     const item = {
       productCode: product.code,
       productName: product.name,
@@ -75,22 +79,29 @@ export function ProductCard({ product, onSelect, index = 0 }: ProductCardProps) 
         <PricingDisplay compact className="mt-1" />
 
         <div className="mt-2 grid grid-cols-4 gap-1">
-          {sizes.map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setSize(option)}
-              className={cn(
-                "h-7 rounded-full border text-[11px] font-semibold transition-colors",
-                size === option
-                  ? "border-black bg-black text-white"
-                  : "border-black/10 bg-muted text-black hover:border-black/30"
-              )}
-              aria-pressed={size === option}
-            >
-              {option}
-            </button>
-          ))}
+          {sizes.map((option) => {
+            const isOutOfStock = product.outOfStockSizes?.includes(option);
+            return (
+              <button
+                key={option}
+                type="button"
+                disabled={isOutOfStock}
+                onClick={() => !isOutOfStock && setSize(option)}
+                className={cn(
+                  "h-7 rounded-full border text-[11px] font-semibold transition-colors",
+                  isOutOfStock
+                    ? "cursor-not-allowed border-black/5 bg-gray-100 text-gray-400 opacity-50 line-through"
+                    : size === option
+                    ? "border-black bg-black text-white"
+                    : "border-black/10 bg-muted text-black hover:border-black/30"
+                )}
+                aria-disabled={isOutOfStock}
+                aria-pressed={size === option}
+              >
+                {option}
+              </button>
+            );
+          })}
         </div>
 
         <Button

@@ -43,6 +43,10 @@ const productNames: Record<number, string> = {
   37: "Rugged Check",
 };
 
+const outOfStockMap: Record<string, import("@/types").Size[]> = {
+  RR04: ["L", "XXL"],
+};
+
 export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
   (acc, photoNumber, index) => {
     const groupIndex = Math.floor(index / 3);
@@ -57,6 +61,7 @@ export const products: Product[] = productPhotoNumbers.reduce<Product[]>(
         images: [
           `/products/rookies 05-08-26 RR ${String(photoNumber).padStart(2, "0")}.png`,
         ],
+        outOfStockSizes: outOfStockMap[code],
       });
     } else {
       const last = acc[acc.length - 1];

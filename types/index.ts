@@ -7,6 +7,7 @@ export interface Product {
   description: string;
   price: number;
   images: string[];
+  outOfStockSizes?: Size[];
 }
 
 export interface CartItem {

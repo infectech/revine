@@ -165,7 +165,11 @@ export default function ProductModal({
               <p className="mb-2 text-sm font-medium text-black">
                 Select Size
               </p>
-              <SizeSelector value={size} onChange={setSize} />
+              <SizeSelector
+                value={size}
+                onChange={setSize}
+                outOfStockSizes={product.outOfStockSizes}
+              />
             </div>
 
             <SizeChart />

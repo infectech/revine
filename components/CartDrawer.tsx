@@ -22,6 +22,7 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { BLUR_PLACEHOLDER } from "@/lib/image";
 import { Size } from "@/types";
+import { getProductByCode } from "@/data/products";
 
 export default function CartDrawer() {
   const isOpen = useCart((s) => s.isOpen);
@@ -90,10 +91,15 @@ export default function CartDrawer() {
                               onChange={(e) => updateSize(item.productCode, item.size, e.target.value as Size)}
                               className="rounded border border-black/10 bg-transparent px-0.5 py-0.5 text-xs outline-none"
                             >
-                              <option value="M">M</option>
-                              <option value="L">L</option>
-                              <option value="XL">XL</option>
-                              <option value="XXL">XXL</option>
+                              {(["M", "L", "XL", "XXL"] as Size[]).map((s) => {
+                                const prod = getProductByCode(item.productCode);
+                                const isOut = prod?.outOfStockSizes?.includes(s);
+                                return (
+                                  <option key={s} value={s} disabled={isOut}>
+                                    {s}{isOut ? " (Out of stock)" : ""}
+                                  </option>
+                                );
+                              })}
                             </select>
                           </div>
                         </div>
